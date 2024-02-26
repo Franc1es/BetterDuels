@@ -18,11 +18,10 @@ permissions:
 
 
 commands:
-  btduel:
-    permission: btd.duels.start
-    description: Comando per iniziare un duello
-    usage: /btduel nome_player
-  btkit:
-    permission: btd.duels.kit
-    description: Comando per scegliere un kit durante il duello
-    usage: /btkit nome_kit
+  duel:
+    description: 'Inizia il duello'
+    usage: '/duel <player>'
+  kit:
+    description: 'prendi un kit'
+    usage: '/kit <kit_name>'
+

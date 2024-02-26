@@ -8,10 +8,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class KitCommand implements CommandExecutor {
-    private final BetterDuels main;
+    private final BetterDuels plugin;
 
-    public KitCommand(BetterDuels main) {
-        this.main = main;
+    public KitCommand(BetterDuels plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -22,25 +22,23 @@ public class KitCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-
         if (args.length != 1) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Uso: &a/kit <nome_kit>"));
+            player.sendMessage(ChatColor.YELLOW + "Uso: " + ChatColor.GREEN + "/kit <nome_kit>");
             return true;
         }
 
         String kitName = args[0].toLowerCase();
-
-        if (!main.getKitManager().kitExists(kitName)) {
+        if (!plugin.getKitManager().kitExists(kitName)) {
             player.sendMessage(ChatColor.RED + "Il kit " + ChatColor.YELLOW + kitName + ChatColor.RED + " non esiste!");
             return true;
         }
 
-        if (!player.hasPermission("btd.duels.kit." + kitName)) {
+        if (!player.hasPermission("betterduels.kit." + kitName)) {
             player.sendMessage(ChatColor.RED + "Non hai il permesso di utilizzare questo kit!");
             return true;
         }
 
-        main.getKitManager().giveKit(player, kitName);
+        plugin.getKitManager().giveKit(player, kitName);
         player.sendMessage(ChatColor.GREEN + "Hai ricevuto il kit: " + ChatColor.YELLOW + kitName);
         return true;
     }

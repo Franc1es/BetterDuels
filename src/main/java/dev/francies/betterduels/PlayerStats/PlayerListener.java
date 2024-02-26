@@ -2,36 +2,45 @@ package dev.francies.betterduels.PlayerStats;
 
 import dev.francies.betterduels.BetterDuels;
 import dev.francies.betterduels.Duels.DuelManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
-    DuelManager manager;
+    private final DuelManager duelManager;
+    private BetterDuels plugin;
 
-    public PlayerListener(DuelManager manager) {
-      this.manager = manager;
+    public PlayerListener(DuelManager duelManager, BetterDuels plugin) {
+        this.duelManager = duelManager;
+        this.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        DuelManager duelManager = manager;
-
-        // Controlla se il giocatore morto stava partecipando a un duello
         if (duelManager.isInDuel(player)) {
-            // Ottieni l'altro giocatore coinvolto nel duello
             Player otherPlayer = duelManager.getOtherPlayer(player);
-
-            // Termina il duello e ripristina gli inventari dei giocatori
             duelManager.endDuel(player, otherPlayer);
+            otherPlayer.sendMessage("Hai vinto il duello!");
+            player.sendMessage("Hai perso il duello!");
+        }
+    }
 
-            // Messaggio di avviso sulla fine del duello
-            player.sendMessage("Il duello è finito perché sei morto.");
-
-            // Rimuovi il giocatore morto dalla lista dei partecipanti al duello
-            duelManager.removePlayer(player);
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (duelManager.isInDuel(player)) {
+            Player otherPlayer = duelManager.getOtherPlayer(player);
+            // Termina il duello e dichiara l'altro giocatore vincitore
+            duelManager.endDuel(player, otherPlayer);
+            otherPlayer.sendMessage("L'altro giocatore ha abbandonato il gioco. Hai vinto il duello!");
+            // Banna il giocatore che ha abbandonato
+            Bukkit.getBanList(org.bukkit.BanList.Type.NAME).addBan(player.getName(), "Hai abbandonato un duello", null, "DuelManager");
+            String command = plugin.getConfig().getString("punishment-command");
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
         }
     }
 }

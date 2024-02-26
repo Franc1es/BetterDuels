@@ -1,41 +1,31 @@
 package dev.francies.betterduels;
 
-import dev.francies.betterduels.Duels.*;
-import dev.francies.betterduels.PlayerStats.*;
-import dev.francies.betterduels.WorldManager.*;
-import dev.francies.betterduels.Kits.*;
+import dev.francies.betterduels.Duels.DuelCommand;
+import dev.francies.betterduels.Duels.DuelManager;
+import dev.francies.betterduels.Kits.KitCommand;
+import dev.francies.betterduels.Kits.KitManager;
+import dev.francies.betterduels.WorldManager.DuelWorldManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BetterDuels extends JavaPlugin {
-
-    private DuelManager manager;
     private KitManager kitManager;
-
+    private DuelManager duelManager;
+    private DuelWorldManager worldManager;
 
     @Override
     public void onEnable() {
-
-
         kitManager = new KitManager(this);
+        worldManager = new DuelWorldManager(this);
+        duelManager = new DuelManager(this, worldManager);
 
-        // Caricamento config
         this.saveDefaultConfig();
-
-        // Comandi del duel
         this.getCommand("duel").setExecutor(new DuelCommand(this));
         this.getCommand("kit").setExecutor(new KitCommand(this));
-
-        // Listener
-
         getLogger().info("BETTERDUELS abilitato! by Francies");
-
     }
 
     @Override
     public void onDisable() {
-
-        // Salvataggio dei dati
-       // playerStatsManager.savePlayerStats();
         getLogger().info("BETTERDUELS disabilitato! by Francies");
     }
 
@@ -43,5 +33,13 @@ public final class BetterDuels extends JavaPlugin {
         return kitManager;
     }
 
+    public DuelWorldManager getWorldManager() {
+        return worldManager;
+    }
 
+
+    // Metodo getter per DuelManager
+    public DuelManager getDuelManager() {
+        return duelManager;
+    }
 }
