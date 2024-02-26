@@ -7,3 +7,22 @@ load: STARTUP
 authors: [Francies]
 description: Plugin per duelli realistici
 website: https://franciesdev.it
+
+permissions:
+  btd.duels.start:
+    description: Permesso per iniziare un duello
+    default: true
+  btd.duels.kit:
+    description: Permesso per il kit 1
+    default: op
+
+
+commands:
+  btduel:
+    permission: btd.duels.start
+    description: Comando per iniziare un duello
+    usage: /btduel nome_player
+  btkit:
+    permission: btd.duels.kit
+    description: Comando per scegliere un kit durante il duello
+    usage: /btkit nome_kit

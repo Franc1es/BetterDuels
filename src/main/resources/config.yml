@@ -1,0 +1,53 @@
+# BETTER DUELS by Francies
+
+
+
+# Kit Manager
+kits:
+  warrior:
+    - material: NETHERITE_SWORD
+      amount: 1
+      name: "La spada spadosa"
+      lore:
+        - "Una spada molto spadosa"
+      enchantments:
+        DAMAGE_ALL: 5
+        SWEEPING_EDGE: 3
+        FIRE_ASPECT: 2
+        UNBREAKING: 3
+    - material: NETHERITE_AXE
+      amount: 1
+      name: "Ascia Mesta"
+      lore:
+        - "Si dice sia l'ascia del boscaiolo di Clash Royale"
+      enchantments:
+        DAMAGE_ALL: 5
+        UNBREAKING: 3
+    - material: NETHERITE_HELMET
+      amount: 1
+      name: "Corona di Spine"
+      lore:
+        - "Non serve precisare da dove viene..."
+      enchantments:
+        PROTECTION: 4
+        THORNS: 3
+        UNBREAKING: 3
+
+# World Manager
+world_duel: "world"
+world_endDuel: "world"
+
+players_end_location:
+  x:
+  y:
+  z:
+
+player1_location:
+  x: 0.0
+  y: 100.0
+  z: 0.0
+
+player2_location:
+  x: 10.0
+  y: 100.0
+  z: 10.0
