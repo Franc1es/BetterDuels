@@ -4,6 +4,7 @@ import dev.francies.betterduels.Duels.DuelCommand;
 import dev.francies.betterduels.Duels.DuelManager;
 import dev.francies.betterduels.Kits.KitCommand;
 import dev.francies.betterduels.Kits.KitManager;
+import dev.francies.betterduels.Mess.Messages;
 import dev.francies.betterduels.WorldManager.DuelWorldManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +15,7 @@ public final class BetterDuels extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Messages.loadMessages(this);
         kitManager = new KitManager(this);
         worldManager = new DuelWorldManager(this);
         duelManager = new DuelManager(this, worldManager);
@@ -33,12 +35,7 @@ public final class BetterDuels extends JavaPlugin {
         return kitManager;
     }
 
-    public DuelWorldManager getWorldManager() {
-        return worldManager;
-    }
 
-
-    // Metodo getter per DuelManager
     public DuelManager getDuelManager() {
         return duelManager;
     }

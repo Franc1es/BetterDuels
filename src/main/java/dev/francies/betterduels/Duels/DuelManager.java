@@ -14,67 +14,62 @@ import java.util.Map;
 public class DuelManager {
     private final BetterDuels main;
     private final Map<Player, ItemStack[]> playerInventoryBackup = new HashMap<>();
-    private final World duelWorld;
-    private final World endDuelWorld;
-    private final Map<Player, Player> duelParticipants = new HashMap<>(); // Mappa per tenere traccia dei partecipanti al duello
+    private final Map<Player, ItemStack[]> playerInventoryBackup1 = new HashMap<>();
+    private final Map<Player, Player> duelParticipants = new HashMap<>();
     private DuelWorldManager worldManager;
 
     public DuelManager(BetterDuels main, DuelWorldManager worldManager) {
         this.main = main;
         this.worldManager = worldManager;
-        this.duelWorld =  worldManager.getDuelWorld();
-        this.endDuelWorld = worldManager.getEndDuelWorld();
 
     }
 
 
     public void startDuel(Player player1, Player player2) {
-        main.getServer().getPluginManager().registerEvents(new PlayerListener(this, main), main);
-        // Salva gli inventari dei giocatori prima di iniziare il duello
-        backupInventory(player1);
-        backupInventory(player2);
+        main.getServer().getPluginManager().registerEvents(new PlayerListener(this, main, worldManager), main);
 
-        // Trasporta i giocatori nel mondo dedicato ai duelli
+        player2.setBedSpawnLocation(worldManager.endPlayerLocation(), true);
+
+        backupInventory(player1, player2);
+
         teleportToDuelWorld(player1, player2);
 
 
-        // Imposta il gioco dei giocatori a SURVIVAL per evitare il volo
         setGameMode(player1,player2);
 
 
-        // Aggiungi i partecipanti al duello alla mappa dei partecipanti
+
         duelParticipants.put(player1, player2);
         duelParticipants.put(player2, player1);
     }
 
     public void endDuel(Player player1, Player player2) {
-        // Ripristina gli inventari dei giocatori dopo il duello
+
         restoreInventory(player1,player2);
 
 
-        // Trasporta i giocatori nel mondo principale
-        teleportToMainWorld(player1,player2);
+        teleportToMainWorld(player1, player2);
 
 
-        // Rimuovi i partecipanti al duello dalla mappa dei partecipanti
         duelParticipants.remove(player1);
         duelParticipants.remove(player2);
     }
 
-    // Controlla se un giocatore è coinvolto in un duello
+
     public boolean isInDuel(Player player) {
         return duelParticipants.containsKey(player);
     }
 
-    // Ottieni l'altro giocatore coinvolto nel duello
+
     public Player getOtherPlayer(Player player) {
         return duelParticipants.get(player);
     }
 
 
-    // Metodi per il backup e il ripristino degli inventari
-    private void backupInventory(Player player) {
-        playerInventoryBackup.put(player, player.getInventory().getContents().clone());
+
+    private void backupInventory(Player player1, Player player2) {
+        playerInventoryBackup.put(player1, player1.getInventory().getContents().clone());
+        playerInventoryBackup1.put(player2, player2.getInventory().getContents().clone());
     }
 
     private void restoreInventory(Player player1, Player player2) {
@@ -83,21 +78,25 @@ public class DuelManager {
             player1.getInventory().setContents(inventoryContents);
             player1.updateInventory();
         }
+        ItemStack[] inventoryContents1 = playerInventoryBackup1.remove(player2);
+        if (inventoryContents != null) {
+            player2.getInventory().setContents(inventoryContents1);
+            player2.updateInventory();
+        }
     }
 
 
     private void teleportToDuelWorld(Player player1, Player player2) {
-        // Utilizza le posizioni specificate da DuelWorldManager per teleportare i giocatori
+
         player1.teleport(worldManager.getPlayer1Location());
         player2.teleport(worldManager.getPlayer2Location());
     }
 
     private void teleportToMainWorld(Player player1, Player player2) {
-        // Teleporta entrambi i giocatori alla posizione di fine duello specificata da DuelWorldManager
-
-        player1.teleport( worldManager.endPlayerLocation());
-        player2.teleport( worldManager.endPlayerLocation());
+        player1.teleport(worldManager.endPlayerLocation());
+        player2.teleport(worldManager.endPlayerLocation());
     }
+
 
     private void setGameMode(Player player1, Player player2) {
         player1.setGameMode(GameMode.SURVIVAL);

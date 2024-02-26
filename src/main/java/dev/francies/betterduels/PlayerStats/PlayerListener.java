@@ -2,7 +2,10 @@ package dev.francies.betterduels.PlayerStats;
 
 import dev.francies.betterduels.BetterDuels;
 import dev.francies.betterduels.Duels.DuelManager;
+import dev.francies.betterduels.Mess.Messages;
+import dev.francies.betterduels.WorldManager.DuelWorldManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,10 +15,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
     private final DuelManager duelManager;
     private BetterDuels plugin;
+    private DuelWorldManager worldManager;
 
-    public PlayerListener(DuelManager duelManager, BetterDuels plugin) {
+    public PlayerListener(DuelManager duelManager, BetterDuels plugin, DuelWorldManager worldManager) {
         this.duelManager = duelManager;
         this.plugin = plugin;
+        this.worldManager = worldManager;
     }
 
     @EventHandler
@@ -24,8 +29,16 @@ public class PlayerListener implements Listener {
         if (duelManager.isInDuel(player)) {
             Player otherPlayer = duelManager.getOtherPlayer(player);
             duelManager.endDuel(player, otherPlayer);
-            otherPlayer.sendMessage("Hai vinto il duello!");
-            player.sendMessage("Hai perso il duello!");
+
+            otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
+
+
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+                player.teleport(worldManager.endPlayerLocation());
+
+            }, 20L);
         }
     }
 
@@ -34,12 +47,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (duelManager.isInDuel(player)) {
             Player otherPlayer = duelManager.getOtherPlayer(player);
-            // Termina il duello e dichiara l'altro giocatore vincitore
+
             duelManager.endDuel(player, otherPlayer);
-            otherPlayer.sendMessage("L'altro giocatore ha abbandonato il gioco. Hai vinto il duello!");
-            // Banna il giocatore che ha abbandonato
-            Bukkit.getBanList(org.bukkit.BanList.Type.NAME).addBan(player.getName(), "Hai abbandonato un duello", null, "DuelManager");
-            String command = plugin.getConfig().getString("punishment-command");
+
+            otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win-by-abbadon")));
+
+            String commandTemplate = plugin.getConfig().getString("punishment-command");
+            String command = commandTemplate.replace("%player%", player.getName());
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
         }
     }

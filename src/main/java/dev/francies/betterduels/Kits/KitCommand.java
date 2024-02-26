@@ -1,6 +1,7 @@
 package dev.francies.betterduels.Kits;
 
 import dev.francies.betterduels.BetterDuels;
+import dev.francies.betterduels.Mess.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,29 +18,29 @@ public class KitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Solo i giocatori possono utilizzare questo comando!");
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm")));
             return true;
         }
 
         Player player = (Player) sender;
         if (args.length != 1) {
-            player.sendMessage(ChatColor.YELLOW + "Uso: " + ChatColor.GREEN + "/kit <nome_kit>");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-usage-command"))); // Assicurati che "kit-usage-command" sia definito nel tuo config
             return true;
         }
 
         String kitName = args[0].toLowerCase();
         if (!plugin.getKitManager().kitExists(kitName)) {
-            player.sendMessage(ChatColor.RED + "Il kit " + ChatColor.YELLOW + kitName + ChatColor.RED + " non esiste!");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-not-exist"))); // Assicurati che "kit-not-exist" sia definito nel tuo config
             return true;
         }
 
         if (!player.hasPermission("betterduels.kit." + kitName)) {
-            player.sendMessage(ChatColor.RED + "Non hai il permesso di utilizzare questo kit!");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm-kit"))); // Usa il messaggio già definito per i permessi
             return true;
         }
 
         plugin.getKitManager().giveKit(player, kitName);
-        player.sendMessage(ChatColor.GREEN + "Hai ricevuto il kit: " + ChatColor.YELLOW + kitName);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-received").replace("%kit%", kitName))); // Assicurati che "kit-received" sia definito nel tuo config
         return true;
     }
 }

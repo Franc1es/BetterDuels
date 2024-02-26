@@ -2,7 +2,7 @@
 
 
 # Utils
-punishment-command: ""
+punishment-command: "ban %player% 9d Uscito durante un combact"
 
 
 # Kit Manager
@@ -14,7 +14,7 @@ kits:
       lore:
         - "Una spada molto spadosa"
       enchantments:
-        DAMAGE_ALL: 5
+        SHARPNESS: 5
         SWEEPING_EDGE: 3
         FIRE_ASPECT: 2
         UNBREAKING: 3
@@ -24,7 +24,7 @@ kits:
       lore:
         - "Si dice sia l'ascia del boscaiolo di Clash Royale"
       enchantments:
-        DAMAGE_ALL: 5
+        SHARPNESS: 5
         UNBREAKING: 3
     - material: NETHERITE_HELMET
       amount: 1
@@ -54,3 +54,19 @@ player2_location:
   x: 10.0
   y: 100.0
   z: 10.0
+
+
+# Messages
+messages:
+  prefix: "&7[&6BetterDuels&7] "
+  win: "&aHai vinto il duello!"
+  defeat: "&cSei stato sconfitto nel duello."
+  no-perm: "&cNon hai il permesso per eseguire questo comando."
+  win-by-abbadon: "&aIl tuo avversario ha abbandonato il duello. Hai vinto!"
+  duel-usage-command: "&eUtilizzo: /duel <nome_giocatore>"
+  no-duel-command-during-duel: "&cNon puoi iniziare un nuovo duello mentre sei già in uno."
+  player-not-online: "&cIl giocatore specificato non è online."
+  error-duel-youself: "&cNon puoi sfidarti da solo in un duello."
+  already-in-a-duel: "&cSei già impegnato in un duello."
+  no-perm-kit: "&cNon hai il permesso di utilizzare questo kit."
+  kit-received: "&aHai ricevuto il kit: %kit%."

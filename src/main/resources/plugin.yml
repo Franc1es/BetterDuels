@@ -12,8 +12,8 @@ permissions:
   btd.duels.start:
     description: Permesso per iniziare un duello
     default: true
-  btd.duels.kit:
-    description: Permesso per il kit 1
+  betterduels.kit:
+    description: Permesso per il kit
     default: op
 
 
