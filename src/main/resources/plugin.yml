@@ -1,0 +1,9 @@
+name: BetterDuels
+version: '${project.version}'
+main: dev.francies.betterduels.BetterDuels
+api-version: '1.13'
+prefix: BTDUELS
+load: STARTUP
+authors: [Francies]
+description: Plugin per duelli realistici
+website: https://franciesdev.it
