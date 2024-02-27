@@ -4,7 +4,6 @@ import dev.francies.betterduels.WorldManager.DuelWorldManager;
 import dev.francies.betterduels.BetterDuels;
 import dev.francies.betterduels.PlayerStats.PlayerListener;
 import org.bukkit.GameMode;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -34,10 +33,7 @@ public class DuelManager {
 
         teleportToDuelWorld(player1, player2);
 
-
         setGameMode(player1,player2);
-
-
 
         duelParticipants.put(player1, player2);
         duelParticipants.put(player2, player1);
@@ -70,6 +66,8 @@ public class DuelManager {
     private void backupInventory(Player player1, Player player2) {
         playerInventoryBackup.put(player1, player1.getInventory().getContents().clone());
         playerInventoryBackup1.put(player2, player2.getInventory().getContents().clone());
+        player1.getInventory().clear();
+        player2.getInventory().clear();
     }
 
     private void restoreInventory(Player player1, Player player2) {
@@ -78,12 +76,15 @@ public class DuelManager {
             player1.getInventory().setContents(inventoryContents);
             player1.updateInventory();
         }
+
+
         ItemStack[] inventoryContents1 = playerInventoryBackup1.remove(player2);
-        if (inventoryContents != null) {
+        if (inventoryContents1 != null) {
             player2.getInventory().setContents(inventoryContents1);
             player2.updateInventory();
         }
     }
+
 
 
     private void teleportToDuelWorld(Player player1, Player player2) {
