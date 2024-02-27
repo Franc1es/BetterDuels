@@ -53,7 +53,9 @@ public class DuelWorldManager {
         playersend = new Location(endDuelWorld, playerendX, playerendY, playerendZ);
     }
 
-
+    public World getEndDuelWorld(){
+        return endDuelWorld;
+    }
     public Location getPlayer1Location() {
         return player1Location;
     }

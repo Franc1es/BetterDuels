@@ -21,7 +21,5 @@ commands:
   duel:
     description: 'Inizia il duello'
     usage: '/duel <player>'
-  kit:
-    description: 'prendi un kit'
-    usage: '/kit <kit_name>'
+
 

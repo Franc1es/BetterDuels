@@ -1,15 +1,20 @@
 package dev.francies.betterduels.Kits;
 
 import dev.francies.betterduels.BetterDuels;
+import dev.francies.betterduels.Mess.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,5 +93,24 @@ public class KitManager {
 
     private void backupInventory(Player player) {
         playerInventoryBackup.put(player, player.getInventory().getContents().clone());
+    }
+    public void openKitSelectionGUI(Player player) {
+
+        Inventory inv = Bukkit.createInventory(null, plugin.getConfig().getInt("GUI.size") ,ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("GUI.name")));
+
+
+        for (String kitName : kits.keySet()) {
+
+            ItemStack kitItem = new ItemStack(Material.PAPER);
+            ItemMeta meta = kitItem.getItemMeta();
+            meta.setDisplayName(ChatColor.GREEN + kitName);
+
+            kitItem.setItemMeta(meta);
+            inv.addItem(kitItem);
+        }
+
+
+
+        player.openInventory(inv);
     }
 }
