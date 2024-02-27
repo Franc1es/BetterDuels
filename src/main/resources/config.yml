@@ -62,6 +62,7 @@ messages:
   win: "&aHai vinto il duello!"
   defeat: "&cSei stato sconfitto nel duello."
   no-perm: "&cNon hai il permesso per eseguire questo comando."
+  no-perm-target: "&cQuel giocatore non ha il permesso di fare duelli."
   win-by-abbadon: "&aIl tuo avversario ha abbandonato il duello. Hai vinto!"
   duel-usage-command: "&eUtilizzo: /duel <nome_giocatore>"
   no-duel-command-during-duel: "&cNon puoi iniziare un nuovo duello mentre sei già in uno."
@@ -70,3 +71,18 @@ messages:
   already-in-a-duel: "&cSei già impegnato in un duello."
   no-perm-kit: "&cNon hai il permesso di utilizzare questo kit."
   kit-received: "&aHai ricevuto il kit: %kit%."
+  inventory-restore: "&aEcco il tuo inventario!"
+  inventory-restore-empty: "&cIl tuo inventario era vuoto"
+  kit-only-during-duel: "&cPuoi scegliere un kit solo durante un duello!"
+  kit-selected: "&aTutti i duellanti hanno selezionato un kit!"
+  choose-kit: "&aRicorda di selezionare un kit!"
+  wait-opponent: "&aIl tuo avversario non ha scelto un kit, attendi..."
+
+GUI:
+  name: "&cKITS"
+  size: 9
+
+countdown:
+  title: "&a%count%"
+  subtitle: "&ePreparati!"
+  time-to-start: 5

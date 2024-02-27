@@ -21,13 +21,20 @@ public class DuelCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm")));
             return true;
         }
-
+        if (!sender.hasPermission("betterduels.start")){
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm")));
+            return true;
+        }
         Player player = (Player) sender;
         if (args.length != 1) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("duel-usage-command")));
             return true;
         }
 
+        if (!player.hasPermission("betterduels.start")){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm-target")));
+            return true;
+        }
 
         if (plugin.getDuelManager().isInDuel(player)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-duel-command-during-duel")));

@@ -12,10 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+
 public class PlayerListener implements Listener {
     private final DuelManager duelManager;
     private BetterDuels plugin;
     private DuelWorldManager worldManager;
+
 
     public PlayerListener(DuelManager duelManager, BetterDuels plugin, DuelWorldManager worldManager) {
         this.duelManager = duelManager;
@@ -25,20 +27,15 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-        if (duelManager.isInDuel(player)) {
-            Player otherPlayer = duelManager.getOtherPlayer(player);
-            duelManager.endDuel(player, otherPlayer);
-
+        event.setDeathMessage("");
+        Player defeatedplayer = event.getEntity();
+        if (duelManager.isInDuel(defeatedplayer)) {
+            Player otherPlayer = duelManager.getOtherPlayer(defeatedplayer);
+            defeatedplayer.setBedSpawnLocation(worldManager.endPlayerLocation(), true);
+            duelManager.endDuel(defeatedplayer, otherPlayer);
             otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win")));
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
+            defeatedplayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
 
-
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                player.teleport(worldManager.endPlayerLocation());
-
-            }, 20L);
         }
     }
 

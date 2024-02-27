@@ -2,7 +2,6 @@ package dev.francies.betterduels;
 
 import dev.francies.betterduels.Duels.DuelCommand;
 import dev.francies.betterduels.Duels.DuelManager;
-import dev.francies.betterduels.Kits.KitCommand;
 import dev.francies.betterduels.Kits.KitManager;
 import dev.francies.betterduels.Mess.Messages;
 import dev.francies.betterduels.WorldManager.DuelWorldManager;
@@ -22,7 +21,6 @@ public final class BetterDuels extends JavaPlugin {
 
         this.saveDefaultConfig();
         this.getCommand("duel").setExecutor(new DuelCommand(this));
-        this.getCommand("kit").setExecutor(new KitCommand(this));
         getLogger().info("BETTERDUELS abilitato! by Francies");
     }
 

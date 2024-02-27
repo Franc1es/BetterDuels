@@ -9,9 +9,9 @@ description: Plugin per duelli realistici
 website: https://franciesdev.it
 
 permissions:
-  btd.duels.start:
+  betterduels.start:
     description: Permesso per iniziare un duello
-    default: true
+    default: op
   betterduels.kit:
     description: Permesso per il kit
     default: op
@@ -21,7 +21,5 @@ commands:
   duel:
     description: 'Inizia il duello'
     usage: '/duel <player>'
-  kit:
-    description: 'prendi un kit'
-    usage: '/kit <kit_name>'
+
 
