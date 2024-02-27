@@ -66,7 +66,6 @@ public class InventoryClickListener implements Listener {
 
                 Player otherPlayer = plugin.getDuelManager().getOtherPlayer(player);
 
-
                 if (plugin.getDuelManager().hasSelectedKit(player) && plugin.getDuelManager().hasSelectedKit(otherPlayer)) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-selected")));
                     otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-selected")));
