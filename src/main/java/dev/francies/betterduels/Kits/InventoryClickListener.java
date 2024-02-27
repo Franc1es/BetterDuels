@@ -81,7 +81,6 @@ public class InventoryClickListener implements Listener {
                     if (!plugin.getDuelManager().hasSelectedKit(otherPlayer)) {
                         otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("wait-opponent")));
                     }
-
                 }
             }
         }
