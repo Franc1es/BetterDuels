@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,12 +25,10 @@ import java.util.stream.Collectors;
 public class KitManager {
     private final BetterDuels plugin;
     private final Map<String, ItemStack[]> kits;
-    private final Map<Player, ItemStack[]> playerInventoryBackup;
 
     public KitManager(BetterDuels plugin) {
         this.plugin = plugin;
         this.kits = new HashMap<>();
-        this.playerInventoryBackup = new HashMap<>();
         loadKits();
     }
 
@@ -49,6 +49,7 @@ public class KitManager {
             kits.put(kitName.toLowerCase(), kitItems);
         }
     }
+
 
     private ItemStack createItemStackFromMap(Map<?, ?> map) {
         Material material = Material.matchMaterial((String) map.get("material"));
@@ -84,32 +85,36 @@ public class KitManager {
     }
 
     public void giveKit(Player player, String kitName) {
-        if (!kitExists(kitName)) return;
-        backupInventory(player);
         ItemStack[] kitItems = kits.get(kitName.toLowerCase());
-        player.getInventory().clear();
-        player.getInventory().setContents(kitItems);
-    }
+        if (kitItems != null) {
+            player.getInventory().clear();
+            player.getInventory().setContents(kitItems);
 
-    private void backupInventory(Player player) {
-        playerInventoryBackup.put(player, player.getInventory().getContents().clone());
-    }
-    public void openKitSelectionGUI(Player player) {
-
-        Inventory inv = Bukkit.createInventory(null, plugin.getConfig().getInt("GUI.size") ,ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("GUI.name")));
-
-
-        for (String kitName : kits.keySet()) {
-
-            ItemStack kitItem = new ItemStack(Material.PAPER);
-            ItemMeta meta = kitItem.getItemMeta();
-            meta.setDisplayName(ChatColor.GREEN + kitName);
-
-            kitItem.setItemMeta(meta);
-            inv.addItem(kitItem);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("kit-received").replace("%kit%", kitName)));
         }
+    }
 
 
+    public void openKitSelectionGUI(Player player) {
+        Inventory inv = Bukkit.createInventory(null, plugin.getConfig().getInt("GUI.size"), ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("GUI.name")));
+
+        ConfigurationSection kitConfigs = plugin.getConfig().getConfigurationSection("GUI.kitConfigs");
+        if (kitConfigs != null) {
+            for (String kitName : kitConfigs.getKeys(false)) {
+                Material material = Material.matchMaterial(kitConfigs.getString(kitName + ".material", "PAPER"));
+                String colorCode = kitConfigs.getString(kitName + ".color", "&f");
+                String coloredKitName = ChatColor.translateAlternateColorCodes('&', colorCode) + kitName;
+
+                ItemStack kitItem = new ItemStack(material != null ? material : Material.PAPER);
+                ItemMeta meta = kitItem.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(coloredKitName);
+                    kitItem.setItemMeta(meta);
+                }
+
+                inv.addItem(kitItem);
+            }
+        }
 
         player.openInventory(inv);
     }

@@ -1,11 +1,15 @@
 # BETTER DUELS by Francies
 
 
-# Utils
-punishment-command: "ban %player% 9d Uscito durante un combact"
+# Punizione
+# Comando per chi abbandona il duello
+punishment-command: "ban %player% 9d Uscito durante un duello"  # %player% player che ha sloggato
 
 
 # Kit Manager
+# possono essere inseriti altri kit, facendo attenzione alla configurazione di quelli di default
+# di ogni kit puoi scegliere gli oggetti, la quantità dell'oggetto, il nome, la lore e gli incantamenti
+
 kits:
   warrior:
     - material: NETHERITE_SWORD
@@ -36,27 +40,31 @@ kits:
         THORNS: 3
         UNBREAKING: 3
 
+
 # World Manager
-world_duel: "world"
-world_endDuel: "world"
+world_duel: "duel" # mondo del duello
+world_endDuel: "world" # mondo per ritornare dal duello
 
+# posizione del respawn alla fine del duello
 players_end_location:
-  x:
-  y:
-  z:
-
-player1_location:
   x: 0.0
   y: 100.0
   z: 0.0
-
-player2_location:
+# posizione nel mondo del duello
+player1_location:  # imposta la posizione del primo giocatore
+  x: 0.0
+  y: 100.0
+  z: 0.0
+  yaw: 0.0    # se qui lo yaw è positivo, allora sotto sarà uguale ma negativo
+  pitch: 0.0 # il pitch del primo e del secondo player sono uguali
+player2_location: # imposta la posizione del secondo giocatore
   x: 10.0
   y: 100.0
   z: 10.0
+  yaw: 0.0
+  pitch: 0.0
 
-
-# Messages
+# Messaggi
 messages:
   prefix: "&7[&6BetterDuels&7] "
   win: "&aHai vinto il duello!"
@@ -65,24 +73,56 @@ messages:
   no-perm-target: "&cQuel giocatore non ha il permesso di fare duelli."
   win-by-abbadon: "&aIl tuo avversario ha abbandonato il duello. Hai vinto!"
   duel-usage-command: "&eUtilizzo: /duel <nome_giocatore>"
+  duel-accept-usage-command: "&eUtilizzo: /duelaccept <nome_giocatore>"
+  duel-deny-usage-command: "&eUtilizzo: /dueldeny  <nome_giocatore>"
   no-duel-command-during-duel: "&cNon puoi iniziare un nuovo duello mentre sei già in uno."
   player-not-online: "&cIl giocatore specificato non è online."
   error-duel-youself: "&cNon puoi sfidarti da solo in un duello."
   already-in-a-duel: "&cSei già impegnato in un duello."
   no-perm-kit: "&cNon hai il permesso di utilizzare questo kit."
-  kit-received: "&aHai ricevuto il kit: %kit%."
+  kit-received: "&aHai ricevuto il kit: %kit%." # %kit% nome del kit ricevuto
   inventory-restore: "&aEcco il tuo inventario!"
   inventory-restore-empty: "&cIl tuo inventario era vuoto"
   kit-only-during-duel: "&cPuoi scegliere un kit solo durante un duello!"
-  kit-selected: "&aTutti i duellanti hanno selezionato un kit!"
-  choose-kit: "&aRicorda di selezionare un kit!"
-  wait-opponent: "&aIl tuo avversario non ha scelto un kit, attendi..."
+  kit-selected: "&aHai scelto il kit attendi...!" # %kit% nome del kit scelto
+  kit-not-exist: "&cIl kit non esiste!"
+  duel-request-sent: "&aHai inviato a %player% una sfida!" # %player% giocatore sfidato
+  duel-request-received: "&aHai ricevuto una sfida da %player%" # %player% giocatore che ha chiesto il duello
+  no-challenge: "&cNon sei stato sfidato!"
+  already-sent-request: "&cHai già mandato una sfida!"
+  duel-request-denied: "&cLa tua richiesta di duello a %player% è stata rifiutata." # %player% giocatore che ha rifiutato la richiesta
+  duel-request-accepted: "&aLa tua richiesta di duello a %player% è stata accettata." # %player% giocatore che ha accettato la richiesta
+
+
 
 GUI:
-  name: "&cKITS"
-  size: 9
+  name: "&cKITS"    # nome della GUI
+  size: 9           # grandezza della gui, solo multipli di 9
+  kitConfigs:       # per ogni kit che crei sopra, inserisci l'omonimo qui
+    warrior:        # nome del kit
+      material: "NETHERITE_SWORD" # icona della GUI rappresentante il kit, di default sarà un PAPER
+      color: "&c"   # colore del nome del kit, usa &
+    archer:
+      material: "BOW"
+      color: "&a"
 
+
+#Gestione del countdown
 countdown:
-  title: "&a%count%"
-  subtitle: "&ePreparati!"
-  time-to-start: 5
+  title: "&a%count%"    #titolo del countdown, %count% tempo inserito sotto
+  subtitle: "&ePreparati!"  #sottotitolo del countdown
+  time-to-start: 5     #tempo del count down
+
+# Configurazione del pulsante
+duel:
+  accept_button_color: GREEN
+  accept_button_text: [Accetta]
+  deny_button_color: RED
+  deny_button_text: [Rifiuta]
+  separetor: |
+  time-to-life: 60 #  tempo prima che scada una sfida
+
+reward:
+  amount: 1 #quantità
+  material: DIAMOND # oggetto da ricevere
+  command: "eco give %player% 200" # %player% giocatore che ha vinto
