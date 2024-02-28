@@ -4,7 +4,7 @@
 ### BetterDuels:
 Plugin per duelli realistici valido dalla 1.8 fino all'ultima versione di Minecraft.
 Completamente configurabile a proprio piacimento. :wrench:
-La scelta dei kit avverrà tramite una GUI che permetterà di creare kit custom. ✖️
+La scelta dei kit avverrà tramite una GUI che permetterà di creare kit custom
 
 ### Developer:
 Francies
