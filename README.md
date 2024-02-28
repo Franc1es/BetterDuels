@@ -14,7 +14,7 @@ Questo plugin necessita del plugin MultiVersCore 2.
 Puoi scaricarlo [qui](https://dev.bukkit.org/projects/multiverse-core)
 
 ### Info/Aiuto:
-Se hai delle domande o richieste passa per il mio [sito](https://franciedev.it) :dizzy:
+Se hai delle domande o richieste passa per il mio [sito](https://franciesdev.it) :dizzy:
 
 ### Comandi:
 1. /duel nome_player   Per iniziare un duello ✔️
