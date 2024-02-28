@@ -11,15 +11,25 @@ website: https://franciesdev.it
 permissions:
   betterduels.start:
     description: Permesso per iniziare un duello
-    default: op
+    default: true
   betterduels.kit:
     description: Permesso per il kit
     default: op
-
+  betterduels.accept:
+    description: Permesso per accettare un duello
+    default: true
+  betterduels.deny:
+    description: Permesso per rifiutare un duello
+    default: true
 
 commands:
   duel:
     description: 'Inizia il duello'
     usage: '/duel <player>'
-
+  duelaccept:
+    description: 'Accetta una richiesta di duello'
+    usage: '/duelaccept'
+  dueldeny:
+    description: 'Rifiuta una richiesta di duello'
+    usage: '/dueldeny'
 

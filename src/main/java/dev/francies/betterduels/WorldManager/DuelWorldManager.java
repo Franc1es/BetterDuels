@@ -33,7 +33,10 @@ public class DuelWorldManager {
         double playerendX = main.getConfig().getDouble("players_end_location.x");
         double playerendY = main.getConfig().getDouble("players_end_location.y");
         double playerendZ = main.getConfig().getDouble("players_end_location.z");
-
+        double pitch1 = main.getConfig().getDouble("player1_location.pitch");
+        double pitch2 = main.getConfig().getDouble("player2_location.pitch");
+        double yaw1 = main.getConfig().getDouble("player1_location.yaw");
+        double yaw2 = main.getConfig().getDouble("player2_location.yaw");
 
         duelWorld = Bukkit.getWorld(duelWorldName);
         if (duelWorld == null) {
@@ -48,8 +51,8 @@ public class DuelWorldManager {
         }
 
 
-        player1Location = new Location(duelWorld, player1X, player1Y, player1Z);
-        player2Location = new Location(duelWorld, player2X, player2Y, player2Z);
+        player1Location = new Location(duelWorld, player1X, player1Y, player1Z, (float) yaw1, (float) pitch1);
+        player2Location = new Location(duelWorld, player2X, player2Y, player2Z, (float) yaw2, (float) pitch2);
         playersend = new Location(endDuelWorld, playerendX, playerendY, playerendZ);
     }
 
