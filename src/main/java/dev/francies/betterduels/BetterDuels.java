@@ -1,6 +1,7 @@
 package dev.francies.betterduels;
 
 import dev.francies.betterduels.Admin.ReloadCommand;
+import dev.francies.betterduels.Database.DatabaseConnection;
 import dev.francies.betterduels.Duels.DuelCommand;
 import dev.francies.betterduels.Duels.DuelManager;
 import dev.francies.betterduels.Kits.KitManager;
@@ -14,7 +15,7 @@ public final class BetterDuels extends JavaPlugin {
     private KitManager kitManager;
     private DuelManager duelManager;
     private DuelWorldManager worldManager;
-
+    private DatabaseConnection dbConnection;
 
     @Override
     public void onEnable() {
@@ -31,6 +32,15 @@ public final class BetterDuels extends JavaPlugin {
         getCommand("duelaccept").setExecutor(duelCommandExecutor);
         getCommand("dueldeny").setExecutor(duelCommandExecutor);
         this.getCommand("btreload").setExecutor(new ReloadCommand(this));
+
+        String host = getConfig().getString("database.host");
+        int port = getConfig().getInt("database.port");
+        String databaseName = getConfig().getString("database.databasename");
+        String username = getConfig().getString("database.username");
+        String password = getConfig().getString("database.password");
+        boolean useSSL = getConfig().getBoolean("database.flagssl");
+        dbConnection = new DatabaseConnection(host, port, databaseName, username, password, useSSL);
+        dbConnection.initialize();
         getLogger().info("BETTERDUELS abilitato! by Francies");
     }
 
@@ -46,5 +56,10 @@ public final class BetterDuels extends JavaPlugin {
 
     public DuelManager getDuelManager() {
         return duelManager;
+    }
+
+
+    public DatabaseConnection getDbConnection() {
+        return dbConnection;
     }
 }

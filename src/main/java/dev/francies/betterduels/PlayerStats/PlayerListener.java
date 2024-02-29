@@ -1,6 +1,7 @@
 package dev.francies.betterduels.PlayerStats;
 
 import dev.francies.betterduels.BetterDuels;
+import dev.francies.betterduels.Database.DatabaseConnection;
 import dev.francies.betterduels.Duels.DuelManager;
 import dev.francies.betterduels.Mess.Messages;
 import dev.francies.betterduels.WorldManager.DuelWorldManager;
@@ -14,34 +15,61 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.UUID;
+
 
 public class PlayerListener implements Listener {
     private final DuelManager duelManager;
     private BetterDuels plugin;
     private DuelWorldManager worldManager;
+    private final DatabaseConnection dbConnection;
 
 
-    public PlayerListener(DuelManager duelManager, BetterDuels plugin, DuelWorldManager worldManager) {
+    public PlayerListener(DuelManager duelManager, BetterDuels plugin, DuelWorldManager worldManager, DatabaseConnection dbConnection) {
         this.duelManager = duelManager;
         this.plugin = plugin;
         this.worldManager = worldManager;
+        this.dbConnection = dbConnection;
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.setDeathMessage("");
         event.getDrops().clear();
-        Player defeatedplayer = event.getEntity();
-        if (duelManager.isInDuel(defeatedplayer)) {
-            Player otherPlayer = duelManager.getOtherPlayer(defeatedplayer);
-            defeatedplayer.setBedSpawnLocation(worldManager.endPlayerLocation(), true);
-            duelManager.endDuel(defeatedplayer, otherPlayer);
+        Player defeatedPlayer = event.getEntity();
+        if (duelManager.isInDuel(defeatedPlayer)) {
+            Player otherPlayer = duelManager.getOtherPlayer(defeatedPlayer);
+            defeatedPlayer.setBedSpawnLocation(worldManager.endPlayerLocation(), true);
+            duelManager.endDuel(defeatedPlayer, otherPlayer);
             otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win")));
-            defeatedplayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
+            defeatedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
 
+
+            try {
+                updatePlayerStats(defeatedPlayer.getUniqueId(), false);
+                updatePlayerStats(otherPlayer.getUniqueId(), true);
+            } catch (SQLException e) {
+                plugin.getLogger().info(e.toString());
+            }
         }
     }
 
+    private void updatePlayerStats(UUID playerUuid, boolean won) throws SQLException {
+        try (Connection conn = dbConnection.getConnection()) {
+            String query = "INSERT INTO BetterDuels_Stats (player_uuid, duels, wins, losses) VALUES (?, 1, ?, ?) ON DUPLICATE KEY UPDATE duels = duels + 1, wins = wins + ?, losses = losses + ?";
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1, playerUuid.toString());
+                ps.setInt(2, won ? 1 : 0);
+                ps.setInt(3, won ? 0 : 1);
+                ps.setInt(4, won ? 1 : 0);
+                ps.setInt(5, won ? 0 : 1);
+                ps.executeUpdate();
+            }
+        }
+    }
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();

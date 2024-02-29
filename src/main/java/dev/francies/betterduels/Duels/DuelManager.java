@@ -36,7 +36,7 @@ public class DuelManager  {
     }
 
     public void startDuel(Player player1, Player player2) {
-        main.getServer().getPluginManager().registerEvents(new PlayerListener(this, main, worldManager), main);
+        main.getServer().getPluginManager().registerEvents(new PlayerListener(this, main, worldManager, main.getDbConnection()), main);
         main.getServer().getPluginManager().registerEvents(new InventoryClickListener(main), main);
         main.getServer().getPluginManager().registerEvents(new FreezePlayersListener(main), main);
 
