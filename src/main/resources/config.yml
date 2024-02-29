@@ -96,6 +96,7 @@ messages:
   already-in-request: "&c%player% ha già un invito attivo!" # %player% giocatore sfidato
   duel-request-expired-target: "&cLa sfida che hai mandato a %player% è scaduta!" #%player% persona sfidata
   duel-request-expired: "&cLa sfida inviata da %player% è scaduta!" #%player% sfidante
+  leaderboard-error: "&cSi è verificato un errore nel recuperare la leaderboard."
 
 
 GUI:
@@ -114,21 +115,29 @@ GUI:
 countdown:
   title: "&a%count%"    #titolo del countdown, %count% tempo inserito sotto
   subtitle: "&ePreparati!"  #sottotitolo del countdown
-  time-to-start: 5     #tempo del count down
+  time-to-start: 5     #tempo del count down in secondi
 
 # Configurazione del pulsante
 duel:
-  time-to-life: 60 #  tempo prima che scada una sfida
+  time-to-life: 60 #  tempo prima che scada una sfida in secondi
 
 reward:
   amount: 1 #quantità
   material: DIAMOND # oggetto da ricevere
   command: "eco give %player% 200" # %player% giocatore che ha vinto
 
+leaderboard:
+  player-to-show: 10 # numero di giocatori da mostrare in classifica
+  header: "&6Top X Giocatori con più vittorie:"
+  entry_format: "&e%rank%. %player% - Vittorie: %wins%"
+  stats-update: 30 # aggiornamento delle leaderboard in secondi
+  # Leaderboard placeholder:
+  # %rank% posizione in classifica del giocatore
+  # %player% giocatore
+  # %wins% vittorie
 
 database:
   host: # metti qui l'ip del tuo database
-  port: 3306 # solitamente è 3306 la porta
   databasename: # nome del database
   username: # inserisci l'username per accedere al database, ricorda di dare il grant
   password: # inserisci la password per accedere al database, ricorda di dare il grant

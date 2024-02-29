@@ -10,7 +10,7 @@ website: https://franciesdev.it
 
 permissions:
   betterduels.admin:
-    description: Permette al giocatore di ricaricare la configurazione di BetterDuels
+    description: Permette al giocatore di ricaricare la configurazione di BetterDuels o mostrare la leaderboard
     default: op
   betterduels.start:
     description: Permesso per iniziare un duello
@@ -38,5 +38,8 @@ commands:
   btreload:
     description: Ricarica la configurazione di BetterDuels
     usage: /btreload
+  duelstats:
+    description: Mostra i top 10 giocatori con più vittorie.
+    usage: /duelstats
 
 

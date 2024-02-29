@@ -58,7 +58,7 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online").replace("%player%", targetPlayer.getName())));
             return true;
         }
-        if (!targetPlayer.hasPermission("betterduels.accecpt") || !targetPlayer.hasPermission("betterduels.deny")) {
+        if (!targetPlayer.hasPermission("betterduels.start")) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm-target").replace("%player%", targetPlayer.getName())));
             return true;
         }
