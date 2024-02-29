@@ -46,10 +46,20 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-usage-command")));
             return true;
         }
+        if (!player.hasPermission("betterduels.start")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm")));
+            return true;
+        }
+
 
         Player targetPlayer = Bukkit.getPlayer(args[0]);
+
         if (targetPlayer == null || !targetPlayer.isOnline()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+        if (!targetPlayer.hasPermission("betterduels.accecpt") || !targetPlayer.hasPermission("betterduels.deny")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm-target").replace("%player%", targetPlayer.getName())));
             return true;
         }
         if (hasPendingRequest(targetPlayer)) {
@@ -94,6 +104,10 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
             return true;
         }
+        if (!targetPlayer.hasPermission("betterduels.accept")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm-target")));
+            return true;
+        }
         if (hasPendingRequest(player)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-accepted-target").replace("%player%", targetPlayer.getName())));
             targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-accepted").replace("%player%", player.getName())));
@@ -117,7 +131,10 @@ public class DuelCommand implements CommandExecutor {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
             return true;
         }
-
+        if (!targetPlayer.hasPermission("betterduels.deny")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
+            return true;
+        }
         if (hasPendingRequest(player)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-denied-target").replace("%player%", targetPlayer.getName())));
             targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-denied").replace("%player%", player.getName())));

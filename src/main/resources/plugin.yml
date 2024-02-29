@@ -9,6 +9,9 @@ description: Plugin per duelli realistici
 website: https://franciesdev.it
 
 permissions:
+  betterduels.admin:
+    description: Permette al giocatore di ricaricare la configurazione di BetterDuels
+    default: op
   betterduels.start:
     description: Permesso per iniziare un duello
     default: true
@@ -32,5 +35,8 @@ commands:
   dueldeny:
     description: Rifiuta una richiesta di duello.
     usage: /dueldeny <player>
+  btreload:
+    description: Ricarica la configurazione di BetterDuels
+    usage: /btreload
 
 

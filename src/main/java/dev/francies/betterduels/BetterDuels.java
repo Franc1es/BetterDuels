@@ -1,5 +1,6 @@
 package dev.francies.betterduels;
 
+import dev.francies.betterduels.Admin.ReloadCommand;
 import dev.francies.betterduels.Duels.DuelCommand;
 import dev.francies.betterduels.Duels.DuelManager;
 import dev.francies.betterduels.Kits.KitManager;
@@ -29,7 +30,7 @@ public final class BetterDuels extends JavaPlugin {
         getCommand("duel").setExecutor(duelCommandExecutor);
         getCommand("duelaccept").setExecutor(duelCommandExecutor);
         getCommand("dueldeny").setExecutor(duelCommandExecutor);
-
+        this.getCommand("btreload").setExecutor(new ReloadCommand(this));
         getLogger().info("BETTERDUELS abilitato! by Francies");
     }
 

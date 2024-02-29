@@ -70,7 +70,7 @@ messages:
   win: "&aHai vinto il duello!"
   defeat: "&cSei stato sconfitto nel duello."
   no-perm: "&cNon hai il permesso per eseguire questo comando."
-  no-perm-target: "&cQuel giocatore non ha il permesso di fare duelli."
+  no-perm-target: "&c%player% non ha il permesso di fare duelli." # %player% persona sfidata
   win-by-abbadon: "&aIl tuo avversario ha abbandonato il duello. Hai vinto!"
   duel-usage-command: "&eUtilizzo: /duel <nome_giocatore>"
   duel-accept-usage-command: "&eUtilizzo: /duelaccept <nome_giocatore>"
