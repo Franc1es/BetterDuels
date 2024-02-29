@@ -26,7 +26,6 @@ public final class BetterDuels extends JavaPlugin {
 
         DuelCommand duelCommandExecutor = new DuelCommand(this);
 
-
         getCommand("duel").setExecutor(duelCommandExecutor);
         getCommand("duelaccept").setExecutor(duelCommandExecutor);
         getCommand("dueldeny").setExecutor(duelCommandExecutor);
