@@ -24,12 +24,13 @@ permissions:
 
 commands:
   duel:
-    description: 'Inizia il duello'
-    usage: '/duel <player>'
+    description: Invia una richiesta di duello a un giocatore.
+    usage: /duel <player>
   duelaccept:
-    description: 'Accetta una richiesta di duello'
-    usage: '/duelaccept'
+    description: Accetta una richiesta di duello.
+    usage: /duelaccept <player>
   dueldeny:
-    description: 'Rifiuta una richiesta di duello'
-    usage: '/dueldeny'
+    description: Rifiuta una richiesta di duello.
+    usage: /dueldeny <player>
+
 

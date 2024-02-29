@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
+
 
 import java.util.*;
 
@@ -26,8 +26,8 @@ public class DuelManager  {
     private final DuelWorldManager worldManager;
     private Map<Player, Boolean> kitSelectionMap = new HashMap<>();
     private final Map<UUID, Boolean> playersInCountdown = new HashMap<>();
-    private Queue<DuelRequest> duelRequests = new LinkedList<>();
-    private BukkitTask expiryTask;
+
+
 
     public DuelManager(BetterDuels main, DuelWorldManager worldManager) {
         this.main = main;
@@ -69,22 +69,16 @@ public class DuelManager  {
             restoreInventory(player2);
         }, 40L);
 
-        giveReward(player2);
+        Bukkit.getScheduler().runTaskLater(main, () -> {
+            giveReward(player2);
+        }, 40L);
+
+
 
         duelParticipants.remove(player1);
         duelParticipants.remove(player2);
     }
-    public void acceptDuelRequest(DuelRequest request) {
-        Player challenger = request.getRequester();
-        Player targetPlayer = request.getTargetPlayer();
 
-        // Invia messaggi di conferma ai giocatori
-        challenger.sendMessage(ChatColor.GREEN + main.getConfig().getString("messages.prefix") + "Your duel request to " + targetPlayer.getName() + " has been accepted.");
-        targetPlayer.sendMessage(ChatColor.GREEN + main.getConfig().getString("messages.prefix") + "You have accepted the duel request from " + challenger.getName() + ".");
-
-        // Implementa ulteriori logiche per avviare il duello
-        startDuel(challenger, targetPlayer);
-    }
 
     private void giveReward(Player player) {
 
@@ -102,43 +96,14 @@ public class DuelManager  {
     public boolean isInDuel(Player player) {
         return duelParticipants.containsKey(player);
     }
-    public void denyDuelRequest(Player targetPlayer) {
-        // Rimuovi la richiesta di duello per il giocatore specificato dalla coda
-        DuelRequest requestToRemove = null;
-        for (DuelRequest request : duelRequests) {
-            if (request.getTargetPlayer().equals(targetPlayer)) {
-                requestToRemove = request;
-                break;
-            }
-        }
-        if (requestToRemove != null) {
-            duelRequests.remove(requestToRemove);
 
-            // Invia un messaggio al giocatore che ha inviato la richiesta
-            Player requester = requestToRemove.getRequester();
-            requester.sendMessage(ChatColor.RED + main.getConfig().getString("messages.prefix") + "Your duel request to " + targetPlayer.getName() + " has been denied.");
-        } else {
-            // Se non c'è nessuna richiesta di duello per il giocatore specificato
-            targetPlayer.sendMessage(ChatColor.RED + main.getConfig().getString("messages.prefix") + "There are no pending duel requests for you.");
-        }
-    }
+
 
     public Player getOtherPlayer(Player player) {
         return duelParticipants.get(player);
     }
     public boolean hasSelectedKit(Player player) {
         return kitSelectionMap.getOrDefault(player, false);
-    }
-    public void sendDuelRequest(Player requester, Player targetPlayer) {
-        // Crea una nuova istanza di DuelRequest
-        DuelRequest request = new DuelRequest(requester, targetPlayer, expiryTask);
-
-        // Aggiungi la richiesta alla coda delle richieste di duello
-        duelRequests.offer(request);
-
-        // Invia messaggi di conferma ai giocatori
-        requester.sendMessage(ChatColor.GREEN + main.getConfig().getString("messages.prefix") + "You have sent a duel request to " + targetPlayer.getName() + ".");
-        targetPlayer.sendMessage(ChatColor.YELLOW + main.getConfig().getString("messages.prefix") + "You have received a duel request from " + requester.getName() + ". Type /duelaccept or /dueldeny to respond.");
     }
 
     private void backupInventory(Player player) {

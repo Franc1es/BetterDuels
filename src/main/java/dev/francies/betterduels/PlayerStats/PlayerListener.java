@@ -30,6 +30,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.setDeathMessage("");
+        event.getDrops().clear();
         Player defeatedplayer = event.getEntity();
         if (duelManager.isInDuel(defeatedplayer)) {
             Player otherPlayer = duelManager.getOtherPlayer(defeatedplayer);

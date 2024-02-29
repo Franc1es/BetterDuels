@@ -1,101 +1,140 @@
 package dev.francies.betterduels.Duels;
 
 import dev.francies.betterduels.BetterDuels;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DuelCommand implements CommandExecutor {
     private final BetterDuels plugin;
-    private final Queue<DuelRequest> duelRequests = new LinkedList<>();
+    private Map<UUID, Player> pendingRequests = new ConcurrentHashMap<>();
 
     public DuelCommand(BetterDuels plugin) {
         this.plugin = plugin;
-        plugin.saveDefaultConfig();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm")));
             return true;
         }
 
         Player player = (Player) sender;
 
         if (label.equalsIgnoreCase("duel")) {
-            if (args.length != 1) {
-                player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-usage-command"));
-                return true;
-            }
-
-            Player targetPlayer = plugin.getServer().getPlayer(args[0]);
-            if (targetPlayer == null || !targetPlayer.isOnline()) {
-                player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online"));
-                return true;
-            }
-
-            if (player.equals(targetPlayer)) {
-                player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.error-duel-youself"));
-                return true;
-            }
-
-            // Memorizza la richiesta di duello
-            BukkitTask expiryTask = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    DuelRequest request = getDuelRequest(player);
-                    if (request != null) {
-                        duelRequests.remove(request);
-                        player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge"));
-                        targetPlayer.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge"));
-                    }
-                }
-            }.runTaskLater(plugin, plugin.getConfig().getInt("duel.time-to-life", 60) * 20);
-
-            DuelRequest request = new DuelRequest(player, targetPlayer, expiryTask);
-            duelRequests.offer(request);
-            plugin.getDuelManager().sendDuelRequest(player, targetPlayer);
-
-            return true;
+            return handleDuel(player, args);
         } else if (label.equalsIgnoreCase("duelaccept")) {
-            // Accetta la richiesta di duello
-            DuelRequest request = getDuelRequest(player);
-            if (request != null) {
-                duelRequests.remove(request);
-                plugin.getDuelManager().acceptDuelRequest(request);
-            } else {
-                player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge"));
-            }
-            return true;
+            return handleDuelAccept(player, args);
         } else if (label.equalsIgnoreCase("dueldeny")) {
-            // Rifiuta la richiesta di duello
-            DuelRequest request = getDuelRequest(player);
-            if (request != null) {
-                duelRequests.remove(request);
-                plugin.getDuelManager().denyDuelRequest(player);
-            } else {
-                player.sendMessage(ChatColor.RED + plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge"));
-            }
+            return handleDuelDeny(player, args);
+        } else {
+            player.sendMessage(ChatColor.RED + "Comando non riconosciuto.");
+            return true;
+        }
+    }
+
+    private boolean handleDuel(Player player, String[] args) {
+        if (args.length != 1) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-usage-command")));
             return true;
         }
 
-        return false;
+        Player targetPlayer = Bukkit.getPlayer(args[0]);
+        if (targetPlayer == null || !targetPlayer.isOnline()) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
+            return true;
+        }
+        if (hasPendingRequest(targetPlayer)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.already-in-request").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+        if (plugin.getDuelManager().isInDuel(player)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-duel-command-during-duel").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+        if (plugin.getDuelManager().isInDuel(targetPlayer)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.already-in-a-duel").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+
+        pendingRequests.put(targetPlayer.getUniqueId(), player);
+        targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-received").replace("%player%", player.getName())));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-sent").replace("%player%", targetPlayer.getName())));
+
+        UUID targetPlayerId = targetPlayer.getUniqueId();
+
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (pendingRequests.containsKey(targetPlayerId)) {
+                pendingRequests.remove(targetPlayerId);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-expired-target").replace("%player%", targetPlayer.getName())));
+                targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-expired").replace("%player%", player.getName())));
+            }
+        }, plugin.getConfig().getInt("duel.time-to-life")*20L);
+
+        return true;
     }
 
-    private DuelRequest getDuelRequest(Player player) {
-        for (DuelRequest request : duelRequests) {
-            if (request.getTargetPlayer().equals(player) || request.getRequester().equals(player)) {
-                return request;
-            }
+    private boolean handleDuelAccept(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-accept-usage-command")));
+            return true;
         }
-        return null;
+
+        Player targetPlayer = Bukkit.getPlayer(args[0]);
+        if (targetPlayer == null || !targetPlayer.isOnline()) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
+            return true;
+        }
+        if (hasPendingRequest(player)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-accepted-target").replace("%player%", targetPlayer.getName())));
+            targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-accepted").replace("%player%", player.getName())));
+            plugin.getDuelManager().startDuel(player, targetPlayer);
+            removePendingRequest(player);
+        } else {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge")));
+        }
+
+        return true;
     }
+
+    private boolean handleDuelDeny(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-deny-usage-command")));
+            return true;
+        }
+
+        Player targetPlayer = plugin.getServer().getPlayer(args[0]);
+        if (targetPlayer == null || !targetPlayer.isOnline()) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.player-not-online")));
+            return true;
+        }
+
+        if (hasPendingRequest(player)) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-denied-target").replace("%player%", targetPlayer.getName())));
+            targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.duel-request-denied").replace("%player%", player.getName())));
+            removePendingRequest(player);
+        } else {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-challenge")));
+        }
+
+        return true;
+    }
+
+    public boolean hasPendingRequest(Player player) {
+        return pendingRequests.containsKey(player.getUniqueId());
+    }
+
+    public void removePendingRequest(Player player) {
+        pendingRequests.remove(player.getUniqueId());
+    }
+
 }

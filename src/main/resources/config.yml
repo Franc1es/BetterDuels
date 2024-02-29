@@ -78,7 +78,7 @@ messages:
   no-duel-command-during-duel: "&cNon puoi iniziare un nuovo duello mentre sei già in uno."
   player-not-online: "&cIl giocatore specificato non è online."
   error-duel-youself: "&cNon puoi sfidarti da solo in un duello."
-  already-in-a-duel: "&cSei già impegnato in un duello."
+  already-in-a-duel: "&c%player% sta facendo un duello, aspetta che finisca!" # %player% player sfidato
   no-perm-kit: "&cNon hai il permesso di utilizzare questo kit."
   kit-received: "&aHai ricevuto il kit: %kit%." # %kit% nome del kit ricevuto
   inventory-restore: "&aEcco il tuo inventario!"
@@ -89,10 +89,13 @@ messages:
   duel-request-sent: "&aHai inviato a %player% una sfida!" # %player% giocatore sfidato
   duel-request-received: "&aHai ricevuto una sfida da %player%" # %player% giocatore che ha chiesto il duello
   no-challenge: "&cNon sei stato sfidato!"
-  already-sent-request: "&cHai già mandato una sfida!"
+  duel-request-denied-target: "&cHai rifiutato il duello di %player%!" # %player% sfidante
+  duel-request-accepted-target: "&aHai accettato il duello di %player%" # %player% sfidante
   duel-request-denied: "&cLa tua richiesta di duello a %player% è stata rifiutata." # %player% giocatore che ha rifiutato la richiesta
   duel-request-accepted: "&aLa tua richiesta di duello a %player% è stata accettata." # %player% giocatore che ha accettato la richiesta
-
+  already-in-request: "&c%player% ha già un invito attivo!" # %player% giocatore sfidato
+  duel-request-expired-target: "&cLa sfida che hai mandato a %player% è scaduta!" #%player% persona sfidata
+  duel-request-expired: "&cLa sfida inviata da %player% è scaduta!" #%player% sfidante
 
 
 GUI:
@@ -115,11 +118,6 @@ countdown:
 
 # Configurazione del pulsante
 duel:
-  accept_button_color: GREEN
-  accept_button_text: [Accetta]
-  deny_button_color: RED
-  deny_button_text: [Rifiuta]
-  separetor: |
   time-to-life: 60 #  tempo prima che scada una sfida
 
 reward:
