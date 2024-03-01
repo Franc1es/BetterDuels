@@ -3,12 +3,14 @@ package dev.francies.betterduels.Duels;
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -60,6 +62,18 @@ public class DuelCommand implements CommandExecutor {
         }
         if (!targetPlayer.hasPermission("betterduels.start")) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-perm-target").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+        if( player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-creative-spectator")));
+            return true;
+        }
+        if( targetPlayer.getGameMode() == GameMode.CREATIVE || targetPlayer.getGameMode() == GameMode.SPECTATOR){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.no-creative-spectator-target").replace("%player%", targetPlayer.getName())));
+            return true;
+        }
+        if (Objects.equals(targetPlayer.getName(), player.getName())) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + plugin.getConfig().getString("messages.error-duel-youself")));
             return true;
         }
         if (hasPendingRequest(targetPlayer)) {

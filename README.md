@@ -1,31 +1,39 @@
-# ATTENZIONE :red_circle:
-*Questo plugin è un fase di sviluppo, quindi alcune funzionalità potrebbero essere non funzionanti o non implementate* :soon:
+### BetterDuels
+Plugin per duelli realistici compatibile dalla versione 1.8 fino all'ultima versione di Minecraft.
+Completamente configurabile per adattarsi a qualsiasi esigenza.  
+La selezione dei kit avviene tramite una GUI intuitiva che permette la creazione di kit personalizzati.
 
-### BetterDuels:
-Plugin per duelli realistici valido dalla 1.8 fino all'ultima versione di Minecraft.
-Completamente configurabile a proprio piacimento. :wrench:
-La scelta dei kit avverrà tramite una GUI che permetterà di creare kit custom
-
-### Developer:
+### Developer
 Francies
 
-### Dipendenze:
-Questo plugin necessita del plugin MultiVersCore 2.
-Puoi scaricarlo [qui](https://dev.bukkit.org/projects/multiverse-core)
+### Dipendenze
+Questo plugin richiede MultiVerse-Core 2 come dipendenza.
+Puoi scaricare MultiVerse-Core [qui](https://dev.bukkit.org/projects/multiverse-core).
 
-### Info/Aiuto:
-Se hai delle domande o richieste passa per il mio [sito](https://franciesdev.it) :dizzy:
+### Info/Aiuto
+Per domande o assistenza, visita il mio [sito web](https://franciesdev.it). :dizzy:
 
-### Comandi:
-1. /duel nome_player   Per iniziare un duello 
-2. /btdreload  Per ricaricare il file di config.yml 
-3. /duelaccept nome_player Per accetare il duello
-4. /dueldeny nome_player Per rifiutare ikbduello
+### Comandi
+- `/duel <nome_player>`: Avvia un duello con un altro giocatore.
+- `/btdreload`: Ricarica il file `config.yml`.
+- `/duelaccept <nome_player>`: Accetta una richiesta di duello.
+- `/dueldeny <nome_player>`: Rifiuta una richiesta di duello.
+- `/duelstats`: Crea la leaderboard per mostrare colore che ne hanno vinti di più.
+- `/duelstatsremove`: Elimina la leaderboard creata.
 
-### Permessi:
-1. betterduels.start permesso di default per usare il comando /duel
-2. betterduels.kit.nomekit da accesso a un kit specifico 
-3. betterduels.admin permesso che permette di ricaricare il config.yml
-4. betterduels.accept permesso per accettare il duello
-5. betterduels.deny permesso per rifiurare il duello
+### Permessi
+- `betterduels.start`: Permesso di default per usare il comando `/duel`.
+- `betterduels.kit.<nomekit>`: Dà accesso a un kit specifico.
+- `betterduels.admin`: Permesso che permette di ricaricare il `config.yml` e eseguire i comandi `/duelstats` e `/duelstatsremove`.
+- `betterduels.accept`: Permesso per accettare il duello.
+- `betterduels.deny`: Permesso per rifiutare il duello.
 
+### Database
+Per creare una leaderboard, il plugin crea automaticamente una tabella
+nel tuo database, che devi aver già creato, del quale hai specificato le informazioni nel `config.yml`  
+database:  
+ host: # metti qui l'ip del tuo database  
+ databasename: # nome del database  
+ username: # inserisci l'username per accedere al database, ricorda di dare il grant  
+ password: # inserisci la password per accedere al database, ricorda di dare il grant  
+ flagssl: false # specifica se il database usa il flagSSL`

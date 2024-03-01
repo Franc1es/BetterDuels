@@ -41,5 +41,8 @@ commands:
   duelstats:
     description: Mostra i top 10 giocatori con più vittorie.
     usage: /duelstats
+  duelstatsremove:
+    description: Elimina la leaderboard più vicina
+    usage: /duelstatsremove
 
 
