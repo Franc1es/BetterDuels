@@ -80,14 +80,19 @@ public class DuelStats implements CommandExecutor {
     }
 
     private void createFloatingText(Location loc, String text) {
-        ArmorStand as = loc.getWorld().spawn(loc, ArmorStand.class);
-        as.setGravity(false);
-        as.setCanPickupItems(false);
-        as.setCustomName(ChatColor.translateAlternateColorCodes('&', text));
-        as.setCustomNameVisible(true);
-        as.setVisible(false);
-        as.setMarker(true);
-        leaderboardArmorStands.add(as);
+        World world = loc.getWorld();
+        if (world == null) {
+            plugin.getLogger().info("");
+        }else{ ArmorStand as = world.spawn(loc, ArmorStand.class);
+            as.setGravity(false);
+            as.setCanPickupItems(false);
+            as.setCustomName(ChatColor.translateAlternateColorCodes('&', text));
+            as.setCustomNameVisible(true);
+            as.setVisible(false);
+            as.setMarker(true);
+            leaderboardArmorStands.add(as);}
+
+
     }
 
     private void updateLeaderboard(Location loc) {
