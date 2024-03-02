@@ -36,4 +36,4 @@ database:
  databasename: # nome del database  
  username: # inserisci l'username per accedere al database, ricorda di dare il grant  
  password: # inserisci la password per accedere al database, ricorda di dare il grant  
- flagssl: false # specifica se il database usa il flagSSL`
+ flagssl: false # specifica se il database usa il flagSSL
