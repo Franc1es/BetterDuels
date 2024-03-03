@@ -6,8 +6,10 @@ import dev.francies.betterduels.Database.DatabaseConnection;
 import dev.francies.betterduels.Database.DuelStats;
 import dev.francies.betterduels.Duels.DuelCommand;
 import dev.francies.betterduels.Duels.DuelManager;
+import dev.francies.betterduels.Kits.InventoryClickListener;
 import dev.francies.betterduels.Kits.KitManager;
 import dev.francies.betterduels.Mess.Messages;
+import dev.francies.betterduels.PlayerStats.onInventoryCloseEvent;
 import dev.francies.betterduels.WorldManager.DuelWorldManager;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,7 +48,7 @@ public final class BetterDuels extends JavaPlugin {
         DuelStats duelStats = new DuelStats(this, dbConnection);
         duelStats.clearExistingLeaderboard();
 
-
+        this.getServer().getPluginManager().registerEvents(new onInventoryCloseEvent(this), this);
         DuelCommand duelCommandExecutor = new DuelCommand(this);
         getCommand("duel").setExecutor(duelCommandExecutor);
         getCommand("duelaccept").setExecutor(duelCommandExecutor);

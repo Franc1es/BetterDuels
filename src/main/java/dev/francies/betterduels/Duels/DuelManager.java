@@ -153,14 +153,17 @@ public class DuelManager  {
     }
 
 
-    private void teleportToDuelWorld(Player player1, Player player2) {
+    private int teleportToDuelWorld(Player player1, Player player2) {
         DuelWorldManager.Arena arena = worldManager.allocateArena();
         if (arena == null) {
             player1.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.no-arena-free")));
-            player1.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.no-arena-free")));
+            player2.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.no-arena-free")));
+            noArenaFree(player1, player2);
+            return 0;
         }else{
             player1.teleport(arena.getPlayer1Location());
             player2.teleport(arena.getPlayer2Location());
+            return 1;
         }
 
     }
@@ -188,27 +191,26 @@ public class DuelManager  {
     }
 
     public void storeKitSelection(Player player, String kitName) {
-
         player.setMetadata("selectedKit", new FixedMetadataValue(main, kitName));
-
-
         markKitSelection(player, true);
-
 
         Player opponent = getOtherPlayer(player);
         if (hasSelectedKit(player) && hasSelectedKit(opponent)) {
-
             Bukkit.getScheduler().runTask(main, () -> {
 
-                teleportToDuelWorld(player, opponent);
-                countDown(player, opponent);
-                applySelectedKit(player);
-                applySelectedKit(opponent);
-
-                setGameMode(player, opponent);
+                if (teleportToDuelWorld(player, opponent) == 1) {
+                    countDown(player, opponent);
+                    applySelectedKit(player);
+                    applySelectedKit(opponent);
+                    setGameMode(player, opponent);
+                } else {
+                    cancelDuel(player);
+                    cancelDuel(opponent);
+                }
             });
         }
     }
+
     public void applySelectedKit(Player player) {
         if (player.hasMetadata("selectedKit")) {
             List<MetadataValue> values = player.getMetadata("selectedKit");
@@ -220,6 +222,39 @@ public class DuelManager  {
                 player.removeMetadata("selectedKit", main);
             }
         }
+    }
+    public void cancelDuel(Player player) {
+        Player opponent = getOtherPlayer(player);
+        if (opponent != null) {
+
+            String arenaName = playerArenaMap.get(player);
+
+            restoreInventory(player);
+            restoreInventory(opponent);
+
+            duelParticipants.remove(player);
+            duelParticipants.remove(opponent);
+            playerArenaMap.remove(player);
+            playerArenaMap.remove(opponent);
+     if (arenaName != null) {
+                worldManager.releaseArena(arenaName);
+            }
+            opponent.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.kit-not-selected").replace("%player%", player.getName())));
+            opponent.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.duel-cancelled")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.duel-cancelled")));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.remember-select-kit")));
+        }
+    }
+
+    public void noArenaFree(Player player, Player opponent){
+        String arenaName = playerArenaMap.get(player);
+        worldManager.releaseArena(arenaName);
+        restoreInventory(player);
+        restoreInventory(opponent);
+        duelParticipants.remove(player);
+        duelParticipants.remove(opponent);
+        playerArenaMap.remove(player);
+        playerArenaMap.remove(opponent);
     }
 
     public void markKitSelection(Player player, boolean selected) {

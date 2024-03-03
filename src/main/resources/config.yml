@@ -104,6 +104,9 @@ messages:
   inventory-restore-empty: "&cIl tuo inventario era vuoto"
   kit-selected: "&aHai scelto il kit attendi...!" # %kit% nome del kit scelto
   kit-not-exist: "&cIl kit non esiste!"
+  kit-not-selected: "&c%player% non ha scelto un kit!" # %player% colui che non ha scelto il kit
+  duel-cancelled: "&cIl duello è annullato!"
+  remember-select-kit: "&cNon hai scelto un kit!"
   duel-request-sent: "&aHai inviato a %player% una sfida!" # # %player% persona sfidata
   duel-request-received: "&aHai ricevuto una sfida da %player%" # %player% giocatore che ha chiesto il duello
   no-challenge: "&cNon sei stato sfidato!"
