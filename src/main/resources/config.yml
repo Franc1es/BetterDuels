@@ -53,18 +53,33 @@ players_end_location:
   y: 100.0
   z: 0.0
 # posizione nel mondo del duello
-player1_location:  # imposta la posizione del primo giocatore
-  x: 0.0
-  y: 100.0
-  z: 0.0
-  yaw: 0.0    # se qui lo yaw è positivo, allora sotto sarà uguale ma negativo
-  pitch: 0.0 # il pitch del primo e del secondo player sono uguali
-player2_location: # imposta la posizione del secondo giocatore
-  x: 10.0
-  y: 100.0
-  z: 10.0
-  yaw: 0.0
-  pitch: 0.0
+arenas:
+  arenas1:
+    player1_location:
+      x: 0.0
+      y: 100.0
+      z: 0.0
+      yaw: 0.0
+      pitch: 0.0
+    player2_location:
+      x: 10.0
+      y: 100.0
+      z: 10.0
+      yaw: 180.0
+      pitch: 0.0
+  arenas2:
+    player1_location:
+      x: 20.0
+      y: 100.0
+      z: 20.0
+      yaw: 0.0
+      pitch: 0.0
+    player2_location:
+      x: 30.0
+      y: 100.0
+      z: 20.0
+      yaw: 180.0
+      pitch: 0.0
 
 # Messaggi
 messages:
@@ -101,6 +116,7 @@ messages:
   duel-request-expired: "&cLa sfida inviata da %player% è scaduta!" #%player% giocatore che ha mandato la sfida
   leaderboard-error: "&cSi è verificato un errore nel recuperare la leaderboard."
   leaderboard-eliminated: "&aLeaderboard più vicina eliminata eliminata!"
+  no-arena-free: "&cAspetta che un'arena si liberi!"
 
 GUI:
   name: "&cKITS"    # nome della GUI

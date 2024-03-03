@@ -68,6 +68,10 @@ public final class BetterDuels extends JavaPlugin {
         return kitManager;
     }
 
+    public DuelWorldManager getWorldManager(){
+        return worldManager;
+    }
+
 
     public DuelManager getDuelManager() {
         return duelManager;

@@ -11,7 +11,7 @@ public class ReloadCommand implements CommandExecutor {
     private final BetterDuels plugin;
 
     public ReloadCommand(BetterDuels plugin) {
-        this.plugin = plugin; // Passa l'istanza del tuo plugin al costruttore
+        this.plugin = plugin;
     }
 
     @Override

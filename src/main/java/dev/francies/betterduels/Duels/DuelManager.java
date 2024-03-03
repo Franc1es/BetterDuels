@@ -6,10 +6,7 @@ import dev.francies.betterduels.PlayerStats.FreezePlayersListener;
 import dev.francies.betterduels.WorldManager.DuelWorldManager;
 import dev.francies.betterduels.BetterDuels;
 import dev.francies.betterduels.PlayerStats.PlayerListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -26,7 +23,7 @@ public class DuelManager  {
     private final DuelWorldManager worldManager;
     private Map<Player, Boolean> kitSelectionMap = new HashMap<>();
     private final Map<UUID, Boolean> playersInCountdown = new HashMap<>();
-
+    private final Map<Player, String> playerArenaMap = new HashMap<>();
 
 
     public DuelManager(BetterDuels main, DuelWorldManager worldManager) {
@@ -41,25 +38,25 @@ public class DuelManager  {
         main.getServer().getPluginManager().registerEvents(new FreezePlayersListener(main), main);
 
 
-            backupInventory(player1);
-            backupInventory(player2);
-            clearAllPotionEffects(player1);
-            clearAllPotionEffects(player2);
+        backupInventory(player1);
+        backupInventory(player2);
+        clearAllPotionEffects(player1);
+        clearAllPotionEffects(player2);
 
 
-            duelParticipants.put(player1, player2);
-            duelParticipants.put(player2, player1);
-            kitSelectionMap.put(player1, false);
-            kitSelectionMap.put(player2, false);
+        duelParticipants.put(player1, player2);
+        duelParticipants.put(player2, player1);
+        kitSelectionMap.put(player1, false);
+        kitSelectionMap.put(player2, false);
 
 
-            main.getKitManager().openKitSelectionGUI(player1);
-            main.getKitManager().openKitSelectionGUI(player2);
+        main.getKitManager().openKitSelectionGUI(player1);
+        main.getKitManager().openKitSelectionGUI(player2);
 
 
     }
 
-    public void endDuel(Player player1, Player player2) {
+    public void endDuel(Player player1, Player player2, String arenaName) {
         player1.getInventory().clear();
         player2.getInventory().clear();
         teleportToMainWorld(player1, player2);
@@ -77,6 +74,9 @@ public class DuelManager  {
 
         duelParticipants.remove(player1);
         duelParticipants.remove(player2);
+        worldManager.releaseArena(arenaName);
+        playerArenaMap.put(player1, arenaName);
+        playerArenaMap.put(player2, arenaName);
     }
 
 
@@ -90,6 +90,10 @@ public class DuelManager  {
         int rewardAmount = main.getConfig().getInt("reward.amount");
         Material rewardMaterial = Material.valueOf(main.getConfig().getString("reward.material"));
         player.getInventory().addItem(new ItemStack(rewardMaterial, rewardAmount));
+    }
+
+    public String getArenaNameForPlayer(Player player) {
+        return playerArenaMap.get(player);
     }
 
 
@@ -150,14 +154,21 @@ public class DuelManager  {
 
 
     private void teleportToDuelWorld(Player player1, Player player2) {
-        player1.teleport(worldManager.getPlayer1Location());
-        player2.teleport(worldManager.getPlayer2Location());
+        DuelWorldManager.Arena arena = worldManager.allocateArena();
+        if (arena == null) {
+            player1.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.no-arena-free")));
+            player1.sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.no-arena-free")));
+        }else{
+            player1.teleport(arena.getPlayer1Location());
+            player2.teleport(arena.getPlayer2Location());
+        }
 
     }
 
     private void teleportToMainWorld(Player player1, Player player2) {
-        player1.teleport(worldManager.endPlayerLocation());
-        player2.teleport(worldManager.endPlayerLocation());
+
+        player1.teleport(main.getWorldManager().getEndLocation());
+        player2.teleport(main.getWorldManager().getEndLocation());
     }
 
     public void setGameMode(Player player1, Player player2) {
@@ -175,6 +186,7 @@ public class DuelManager  {
     public boolean isInCountdown(Player player) {
         return playersInCountdown.getOrDefault(player.getUniqueId(), false);
     }
+
     public void storeKitSelection(Player player, String kitName) {
 
         player.setMetadata("selectedKit", new FixedMetadataValue(main, kitName));

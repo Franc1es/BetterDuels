@@ -42,8 +42,8 @@ public class PlayerListener implements Listener {
         Player defeatedPlayer = event.getEntity();
         if (duelManager.isInDuel(defeatedPlayer)) {
             Player otherPlayer = duelManager.getOtherPlayer(defeatedPlayer);
-            defeatedPlayer.setBedSpawnLocation(worldManager.endPlayerLocation(), true);
-            duelManager.endDuel(defeatedPlayer, otherPlayer);
+            defeatedPlayer.setBedSpawnLocation(worldManager.getEndLocation(), true);
+            duelManager.endDuel(defeatedPlayer, otherPlayer, duelManager.getArenaNameForPlayer(defeatedPlayer));
             otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win")));
             defeatedPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("defeat")));
 
@@ -76,7 +76,7 @@ public class PlayerListener implements Listener {
         if (duelManager.isInDuel(player)) {
             Player otherPlayer = duelManager.getOtherPlayer(player);
 
-            duelManager.endDuel(player, otherPlayer);
+            duelManager.endDuel(player, otherPlayer, duelManager.getArenaNameForPlayer(player));
 
             otherPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("win-by-abbadon")));
 

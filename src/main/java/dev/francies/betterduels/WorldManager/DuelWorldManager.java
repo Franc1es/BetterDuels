@@ -4,68 +4,75 @@ import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class DuelWorldManager {
-    private final BetterDuels main;
-    private World duelWorld;
-    private Location player1Location;
-    private Location player2Location;
-    private Location playersend;
-    private World endDuelWorld;
-    public DuelWorldManager(BetterDuels main) {
-        this.main = main;
-        loadWorldAndLocations();
+    private final BetterDuels plugin;
+    private final Map<String, Arena> arenas = new HashMap<>();
+    private final Queue<String> availableArenas = new LinkedList<>();
+
+    public DuelWorldManager(BetterDuels plugin) {
+        this.plugin = plugin;
+        loadArenas();
     }
 
-    private void loadWorldAndLocations() {
+    private void loadArenas() {
+        ConfigurationSection arenasSection = plugin.getConfig().getConfigurationSection("arenas");
+        if (arenasSection != null) {
+            for (String key : arenasSection.getKeys(false)) {
+                ConfigurationSection arenaSection = arenasSection.getConfigurationSection(key);
+                Location player1Location = loadLocation(arenaSection.getConfigurationSection("player1_location"));
+                Location player2Location = loadLocation(arenaSection.getConfigurationSection("player2_location"));
+                arenas.put(key, new Arena(player1Location, player2Location));
+                availableArenas.offer(key);
+            }
+        }
+    }
+    public Location getEndLocation(){
+        double playerendX = plugin.getConfig().getDouble("players_end_location.x");
+        double playerendY = plugin.getConfig().getDouble("players_end_location.y");
+        double playerendZ = plugin.getConfig().getDouble("players_end_location.z");
+        String endDuelWorldName = plugin.getConfig().getString("world_endDuel");
+        World endDuelWorld = Bukkit.getWorld(endDuelWorldName);
+        return new Location(endDuelWorld, playerendX, playerendY, playerendZ);
+    }
+    private Location loadLocation(ConfigurationSection section) {
+        return new Location(Bukkit.getWorld(plugin.getConfig().getString("world_duel")),
+                section.getDouble("x"),
+                section.getDouble("y"),
+                section.getDouble("z"),
+                (float) section.getDouble("yaw"),
+                (float) section.getDouble("pitch"));
+    }
 
-        main.reloadConfig();
+    public Arena allocateArena() {
+        String arenaName = availableArenas.poll();
+        return arenaName == null ? null : arenas.get(arenaName);
+    }
 
-        String duelWorldName = main.getConfig().getString("world_duel");
-        String endDuelWorldName = main.getConfig().getString("world_endDuel");
+    public void releaseArena(String arenaName) {
+        availableArenas.offer(arenaName);
+    }
 
-        double player1X = main.getConfig().getDouble("player1_location.x");
-        double player1Y = main.getConfig().getDouble("player1_location.y");
-        double player1Z = main.getConfig().getDouble("player1_location.z");
-        double player2X = main.getConfig().getDouble("player2_location.x");
-        double player2Y = main.getConfig().getDouble("player2_location.y");
-        double player2Z = main.getConfig().getDouble("player2_location.z");
-        double playerendX = main.getConfig().getDouble("players_end_location.x");
-        double playerendY = main.getConfig().getDouble("players_end_location.y");
-        double playerendZ = main.getConfig().getDouble("players_end_location.z");
-        double pitch1 = main.getConfig().getDouble("player1_location.pitch");
-        double pitch2 = main.getConfig().getDouble("player2_location.pitch");
-        double yaw1 = main.getConfig().getDouble("player1_location.yaw");
-        double yaw2 = main.getConfig().getDouble("player2_location.yaw");
+    public static class Arena {
+        private final Location player1Location;
+        private final Location player2Location;
 
-        duelWorld = Bukkit.getWorld(duelWorldName);
-        if (duelWorld == null) {
-            main.getLogger().warning("Impossibile trovare il mondo per l'inizio del duello.");
-            return;
+        public Arena(Location player1Location, Location player2Location) {
+            this.player1Location = player1Location;
+            this.player2Location = player2Location;
         }
 
-        endDuelWorld = Bukkit.getWorld(endDuelWorldName);
-        if (endDuelWorld == null) {
-            main.getLogger().warning("Impossibile trovare il mondo per la fine del duello.");
-            return;
+        public Location getPlayer1Location() {
+            return player1Location;
         }
 
-
-        player1Location = new Location(duelWorld, player1X, player1Y, player1Z, (float) yaw1, (float) pitch1);
-        player2Location = new Location(duelWorld, player2X, player2Y, player2Z, (float) yaw2, (float) pitch2);
-        playersend = new Location(endDuelWorld, playerendX, playerendY, playerendZ);
-    }
-
-    public World getEndDuelWorld(){
-        return endDuelWorld;
-    }
-    public Location getPlayer1Location() {
-        return player1Location;
-    }
-    public Location endPlayerLocation() {
-        return playersend;
-    }
-    public Location getPlayer2Location() {
-        return player2Location;
+        public Location getPlayer2Location() {
+            return player2Location;
+        }
     }
 }
