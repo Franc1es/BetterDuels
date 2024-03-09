@@ -1,6 +1,7 @@
 package dev.francies.betterduels.Admin;
 
 import dev.francies.betterduels.BetterDuels;
+import dev.francies.betterduels.Mess.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,9 +19,9 @@ public class ReloadCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("betterduels.admin")) {
             plugin.reloadConfig();
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("messages.prefix") + "&aConfigurazione di BetterDuels ricaricata con successo."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + "&aConfigurazione di BetterDuels ricaricata con successo."));
         } else {
-            sender.sendMessage(ChatColor.RED + "Non hai il permesso per eseguire questo comando.");
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + Messages.get("no-perm")));
         }
         return true;
     }

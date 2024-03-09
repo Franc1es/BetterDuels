@@ -22,6 +22,6 @@ public class Messages {
     }
 
     public static String get(String key) {
-        return messages.getOrDefault(key, "Message not found: " + key);
+        return messages.getOrDefault(key, ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + "&cMessaggio non trovato: " + key));
     }
 }
