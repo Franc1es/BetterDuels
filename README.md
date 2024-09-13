@@ -14,11 +14,11 @@ You can download MultiVerse-Core [qui](https://dev.bukkit.org/projects/multivers
 For questions or assistance, visit my [site](https://franciesdev.it). :dizzy:
 
 ### Permissions 📃
-betterduels.admin: Allows the player to reload the BetterDuels configuration or show the leaderboard.
-betterduels.start: Permission to start a duel.
-betterduels.kit: Permission for accessing kits.
-betterduels.accept: Permission to accept a duel.
-betterduels.deny: Permission to deny a duel.
+* betterduels.admin: Allows the player to reload the BetterDuels configuration or show the leaderboard.
+* betterduels.start: Permission to start a duel.
+* betterduels.kit: Permission for accessing kits.
+* betterduels.accept: Permission to accept a duel.
+* betterduels.deny: Permission to deny a duel.
 ### Commands: 📃
 /duel: Sends a duel request to a player.
 /duelaccept: Accepts a duel request.
