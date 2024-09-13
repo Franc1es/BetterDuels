@@ -18,7 +18,7 @@ Per domande o assistenza, visita il mio [sito web](https://franciesdev.it). :diz
 - `/btdreload`: Ricarica il file `config.yml`.
 - `/duelaccept <nome_player>`: Accetta una richiesta di duello.
 - `/dueldeny <nome_player>`: Rifiuta una richiesta di duello.
-- `/duelstats`: Crea la leaderboard per mostrare colore che ne hanno vinti di più.
+- `/duelstats`: Crea la leaderboard per mostrare coloro che ne hanno vinti di più.
 - `/duelstatsremove`: Elimina la leaderboard creata.
 
 ### Permessi
