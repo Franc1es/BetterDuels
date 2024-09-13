@@ -1,4 +1,4 @@
-package dev.francies.betterduels.PlayerStats;
+package dev.francies.betterduels.playerstats;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.entity.Player;

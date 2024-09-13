@@ -1,14 +1,11 @@
-package dev.francies.betterduels.PlayerStats;
+package dev.francies.betterduels.playerstats;
 
 import dev.francies.betterduels.BetterDuels;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class onInventoryCloseEvent implements Listener {
     private final BetterDuels plugin;

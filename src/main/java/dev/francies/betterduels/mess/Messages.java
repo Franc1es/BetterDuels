@@ -1,4 +1,4 @@
-package dev.francies.betterduels.Mess;
+package dev.francies.betterduels.mess;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,13 +15,13 @@ public class Messages {
         if (config.getConfigurationSection("messages") != null) {
             for (String key : config.getConfigurationSection("messages").getKeys(false)) {
                 String path = "messages." + key;
-                String message = config.getString(path, "&cMessaggio non trovato: " + key);
+                String message = config.getString(path, "&cMesssage not found: " + key);
                 messages.put(key, ChatColor.translateAlternateColorCodes('&', message));
             }
         }
     }
 
     public static String get(String key) {
-        return messages.getOrDefault(key, ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + "&cMessaggio non trovato: " + key));
+        return messages.getOrDefault(key, ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + "&cMesssage not found: " + key));
     }
 }

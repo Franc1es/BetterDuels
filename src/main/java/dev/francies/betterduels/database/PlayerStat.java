@@ -1,4 +1,4 @@
-package dev.francies.betterduels.Database;
+package dev.francies.betterduels.database;
 
 public class PlayerStat {
     private String playerUuid;

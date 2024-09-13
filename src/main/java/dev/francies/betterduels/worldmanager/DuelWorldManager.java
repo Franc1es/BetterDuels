@@ -1,4 +1,4 @@
-package dev.francies.betterduels.WorldManager;
+package dev.francies.betterduels.worldmanager;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package dev.francies.betterduels.Duels;
+package dev.francies.betterduels.duels;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;
@@ -38,7 +38,7 @@ public class DuelCommand implements CommandExecutor {
         } else if (label.equalsIgnoreCase("dueldeny")) {
             return handleDuelDeny(player, args);
         } else {
-            player.sendMessage(ChatColor.RED + "Comando non riconosciuto.");
+            player.sendMessage(ChatColor.RED + "Command not found");
             return true;
         }
     }

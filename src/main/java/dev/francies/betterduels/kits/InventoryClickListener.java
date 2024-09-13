@@ -1,13 +1,11 @@
-package dev.francies.betterduels.Kits;
+package dev.francies.betterduels.kits;
 
 import dev.francies.betterduels.BetterDuels;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryClickListener implements Listener {

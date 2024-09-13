@@ -1,4 +1,4 @@
-package dev.francies.betterduels.Database;
+package dev.francies.betterduels.database;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;

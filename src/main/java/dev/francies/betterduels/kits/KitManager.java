@@ -1,7 +1,7 @@
-package dev.francies.betterduels.Kits;
+package dev.francies.betterduels.kits;
 
 import dev.francies.betterduels.BetterDuels;
-import dev.francies.betterduels.Mess.Messages;
+import dev.francies.betterduels.mess.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

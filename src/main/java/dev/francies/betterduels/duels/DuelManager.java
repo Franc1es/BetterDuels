@@ -1,11 +1,11 @@
-package dev.francies.betterduels.Duels;
+package dev.francies.betterduels.duels;
 
-import dev.francies.betterduels.Kits.InventoryClickListener;
-import dev.francies.betterduels.Mess.Messages;
-import dev.francies.betterduels.PlayerStats.FreezePlayersListener;
-import dev.francies.betterduels.WorldManager.DuelWorldManager;
+import dev.francies.betterduels.kits.InventoryClickListener;
+import dev.francies.betterduels.mess.Messages;
+import dev.francies.betterduels.playerstats.FreezePlayersListener;
+import dev.francies.betterduels.worldmanager.DuelWorldManager;
 import dev.francies.betterduels.BetterDuels;
-import dev.francies.betterduels.PlayerStats.PlayerListener;
+import dev.francies.betterduels.playerstats.PlayerListener;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

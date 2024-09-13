@@ -1,24 +1,22 @@
-# Config per BETTERDUELS by Francies
+# BETTERDUELS by Francies
+#
+# Leave a review if you like the plugin!
 
 
-
-
-# Punizione
-# Comando per chi abbandona il duello
-punishment-command: "ban %player% 9d Uscito durante un duello"  # %player% player che ha sloggato
-
+# Command for players who leave the duel
+punishment-command: "ban %player% 9d Left during a duel"  # %player% is the player who disconnected
 
 # Kit Manager
-# Possono essere inseriti altri kit, facendo attenzione alla configurazione di quelli di default.
-# Di ogni kit puoi scegliere gli oggetti, la quantità dell'oggetto, il nome, la lore e gli incantamenti
+# You can add more kits, just be careful with the configuration of default ones.
+# For each kit, you can choose the items, item quantity, name, lore, and enchantments
 
 kits:
   warrior:
     - material: NETHERITE_SWORD
       amount: 1
-      name: "&cLa spada spadosa"
+      name: "&cThe Mighty Sword"
       lore:
-        - "&cUna spada molto spadosa"
+        - "&cA very mighty sword"
       enchantments:
         SHARPNESS: 5
         SWEEPING_EDGE: 3
@@ -26,33 +24,32 @@ kits:
         UNBREAKING: 3
     - material: NETHERITE_AXE
       amount: 1
-      name: "&bAscia Mesta"
+      name: "&bGloomy Axe"
       lore:
-        - "&bSi dice sia l'ascia del boscaiolo di Clash Royale"
+        - "&bSaid to be the lumberjack's axe from Clash Royale"
       enchantments:
         SHARPNESS: 5
         UNBREAKING: 3
     - material: NETHERITE_HELMET
       amount: 1
-      name: "&eCorona di Spine"
+      name: "&eCrown of Thorns"
       lore:
-        - "&eNon serve precisare da dove viene..."
+        - "&eNo need to mention where it's from..."
       enchantments:
         PROTECTION: 4
         THORNS: 3
         UNBREAKING: 3
 
-
 # World Manager
-world_duel: "duel" # mondo del duello
-world_endDuel: "world" # mondo per ritornare dal duello
+world_duel: "duel" # World where duels take place
+world_endDuel: "world" # World to return to after duels
 
-# posizione del respawn alla fine del duello
+# Respawn location after the duel
 players_end_location:
   x: 0.0
   y: 100.0
   z: 0.0
-# posizione nel mondo del duello
+# Duel arena locations, you can put any arenas you want
 arenas:
   arenas1:
     player1_location:
@@ -81,87 +78,86 @@ arenas:
       yaw: 180.0
       pitch: 0.0
 
-# Messaggi
+# Messages
 messages:
   prefix: "&7[&6BetterDuels&7] "
-  win: "&aHai vinto il duello!"
-  defeat: "&cSei stato sconfitto nel duello."
-  no-perm: "&cNon hai il permesso per eseguire questo comando."
-  no-perm-target: "&c%player% non ha il permesso di fare duelli." # %player% persona sfidata
-  no-creative-spectator: "&cNon puoi fare un duello se sei in creativa o spettatore"
-  no-creative-spectator-target: "&c%player% non può fare un duello dato che è in creativa o spettatore" # %player% persona sfidata
-  win-by-abbadon: "&aIl tuo avversario ha abbandonato il duello. Hai vinto!"
-  duel-usage-command: "&eUtilizzo: /duel <nome_giocatore>"
-  duel-accept-usage-command: "&eUtilizzo: /duelaccept <nome_giocatore>"
-  duel-deny-usage-command: "&eUtilizzo: /dueldeny  <nome_giocatore>"
-  no-duel-command-during-duel: "&cNon puoi iniziare un nuovo duello mentre sei già in uno."
-  player-not-online: "&cIl giocatore specificato non è online."
-  error-duel-youself: "&cNon puoi sfidarti da solo in un duello."
-  already-in-a-duel: "&c%player% sta facendo un duello, aspetta che finisca!" # %player% persona sfidata
-  no-perm-kit: "&cNon hai il permesso di utilizzare questo kit."
-  kit-received: "&aHai ricevuto il kit: %kit%." # %kit% nome del kit ricevuto
-  inventory-restore: "&aEcco il tuo inventario!"
-  inventory-restore-empty: "&cIl tuo inventario era vuoto"
-  kit-selected: "&aHai scelto il kit attendi...!" # %kit% nome del kit scelto
-  kit-not-exist: "&cIl kit non esiste!"
-  kit-not-selected: "&c%player% non ha scelto un kit!" # %player% colui che non ha scelto il kit
-  duel-cancelled: "&cIl duello è annullato!"
-  remember-select-kit: "&cNon hai scelto un kit!"
-  duel-request-sent: "&aHai inviato a %player% una sfida!" # # %player% persona sfidata
-  duel-request-received: "&aHai ricevuto una sfida da %player%" # %player% giocatore che ha chiesto il duello
-  no-challenge: "&cNon sei stato sfidato!"
-  duel-request-denied-target: "&cHai rifiutato il duello di %player%!" # %player% persona sfidata
-  duel-request-accepted-target: "&aHai accettato il duello di %player%" # %player% persona sfidata
-  duel-request-denied: "&cLa tua richiesta di duello a %player% è stata rifiutata." # %player% giocatore che ha rifiutato la richiesta
-  duel-request-accepted: "&aLa tua richiesta di duello a %player% è stata accettata." # %player% giocatore che ha accettato la richiesta
-  already-in-request: "&c%player% ha già un invito attivo!" # %player% persona sfidata
-  duel-request-expired-target: "&cLa sfida che hai mandato a %player% è scaduta!" #%player% persona sfidata
-  duel-request-expired: "&cLa sfida inviata da %player% è scaduta!" #%player% giocatore che ha mandato la sfida
-  leaderboard-error: "&cSi è verificato un errore nel recuperare la leaderboard."
-  leaderboard-eliminated: "&aLeaderboard più vicina eliminata eliminata!"
-  no-arena-free: "&cAspetta che un'arena si liberi!"
+  win: "&aYou won the duel!"
+  defeat: "&cYou lost the duel."
+  no-perm: "&cYou don't have permission to use this command."
+  no-perm-target: "&c%player% doesn't have permission to duel." # %player% is the challenged player
+  no-creative-spectator: "&cYou cannot duel while in creative or spectator mode"
+  no-creative-spectator-target: "&c%player% cannot duel because they are in creative or spectator mode" # %player% is the challenged player
+  win-by-abbadon: "&aYour opponent abandoned the duel. You win!"
+  duel-usage-command: "&eUsage: /duel <player_name>"
+  duel-accept-usage-command: "&eUsage: /duelaccept <player_name>"
+  duel-deny-usage-command: "&eUsage: /dueldeny <player_name>"
+  no-duel-command-during-duel: "&cYou can't start a new duel while already in one."
+  player-not-online: "&cThe specified player is not online."
+  error-duel-youself: "&cYou cannot duel yourself."
+  already-in-a-duel: "&c%player% is already in a duel, wait for it to finish!" # %player% is the challenged player
+  no-perm-kit: "&cYou don't have permission to use this kit."
+  kit-received: "&aYou received the kit: %kit%." # %kit% is the name of the kit
+  inventory-restore: "&aHere's your inventory back!"
+  inventory-restore-empty: "&cYour inventory was empty"
+  kit-selected: "&aYou selected the kit, please wait...!" # %kit% is the name of the kit selected
+  kit-not-exist: "&cThe kit does not exist!"
+  kit-not-selected: "&c%player% hasn't selected a kit!" # %player% is the player who hasn't selected a kit
+  duel-cancelled: "&cThe duel has been canceled!"
+  remember-select-kit: "&cYou haven't selected a kit!"
+  duel-request-sent: "&aYou sent a challenge to %player%!" # %player% is the challenged player
+  duel-request-received: "&aYou received a duel challenge from %player%" # %player% is the player who challenged you
+  no-challenge: "&cYou haven't been challenged!"
+  duel-request-denied-target: "&cYou denied the duel challenge from %player%!" # %player% is the challenged player
+  duel-request-accepted-target: "&aYou accepted the duel challenge from %player%" # %player% is the challenged player
+  duel-request-denied: "&cYour duel challenge to %player% was denied." # %player% is the player who denied your request
+  duel-request-accepted: "&aYour duel challenge to %player% was accepted." # %player% is the player who accepted your request
+  already-in-request: "&c%player% already has an active challenge!" # %player% is the challenged player
+  duel-request-expired-target: "&cThe challenge you sent to %player% has expired!" # %player% is the challenged player
+  duel-request-expired: "&cThe challenge from %player% has expired!" # %player% is the player who sent the challenge
+  leaderboard-error: "&cAn error occurred while retrieving the leaderboard."
+  leaderboard-eliminated: "&aClosest leaderboard eliminated!"
+  no-arena-free: "&cWait for an arena to free up!"
 
 GUI:
-  name: "&cKITS"    # nome della GUI
-  size: 9           # grandezza della gui, solo multipli di 9
-  kitConfigs:       # per ogni kit che crei sopra, inserisci l'omonimo qui
-    warrior:        # nome del kit
-      material: "NETHERITE_SWORD" # icona della GUI rappresentante il kit, di default sarà un PAPER
-      color: "&c"   # colore del nome del kit, usa &
+  name: "&cKITS"    # Name of the GUI
+  size: 9           # Size of the GUI, must be multiples of 9
+  kitConfigs:       # For every kit created above, insert the same name here
+    warrior:        # Name of the kit
+      material: "NETHERITE_SWORD" # Icon for the GUI representing the kit, default is PAPER
+      color: "&c"   # Color for the kit name, use &
     archer:
       material: "BOW"
       color: "&a"
 
-
-#Gestione del countdown
+# Countdown management
 countdown:
-  title: "&a%count%"    #titolo del countdown, %count% tempo inserito sotto
-  subtitle: "&ePreparati!"  #sottotitolo del countdown
-  time-to-start: 5     #tempo del count down in secondi
+  title: "&a%count%"    # Title of the countdown, %count% for time
+  subtitle: "&ePrepare yourself!"  # Subtitle of the countdown
+  time-to-start: 5     # Countdown time in seconds
 
-# Configurazione del pulsante
+# Button configuration
 duel:
-  time-to-life: 60 #  tempo prima che scada una sfida in secondi
+  time-to-life: 60 # Time before a duel challenge expires in seconds
 
 reward:
-  amount: 1 #quantità
-  material: DIAMOND # oggetto da ricevere
-  command: "eco give %player% 200" # %player% giocatore che ha vinto
+  amount: 1 # Amount of the reward
+  material: DIAMOND # Item to be received as a reward
+  command: "eco give %player% 200" # %player% is the player who won
 
 leaderboard:
-  player-to-show: 10 # numero di giocatori da mostrare in classifica
-  header: "&6Top X Giocatori con più vittorie:" # al posto di X inserisci quello che hai messo su player-to-show
-  entry_format: "&e%rank%. %player% - Vittorie: %wins%"
-  stats-update: 120 # aggiornamento delle leaderboard in secondi
-  # Leaderboard placeholder:
-  # %rank% posizione in classifica del giocatore
-  # %player% giocatore
-  # %wins% vittorie
+  player-to-show: 10 # Number of players to display on the leaderboard
+  header: "&6Top X Players with the Most Wins:" # X will be replaced with the player-to-show value
+  entry_format: "&e%rank%. %player% - Wins: %wins%"
+  stats-update: 120 # Update interval for leaderboard in seconds
+  # Leaderboard placeholders:
+  # %rank% is the player's position on the leaderboard
+  # %player% is the player's name
+  # %wins% is the number of wins
 
+# MySql
 database:
-  host: # metti qui l'ip del tuo database
-  databasename: # nome del database
-  username: # inserisci l'username per accedere al database, ricorda di dare il grant
-  password: # inserisci la password per accedere al database, ricorda di dare il grant
-  flagssl: false # specifica se il database usa il flagSSL
-
+  host: # Enter your database IP here
+  databasename: # Name of the database
+  username: # Username for database access, remember to grant permissions
+  password: # Password for database access, remember to grant permissions
+  flagssl: false # Specify if the database uses SSL flag

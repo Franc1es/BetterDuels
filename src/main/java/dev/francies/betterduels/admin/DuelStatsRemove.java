@@ -1,4 +1,4 @@
-package dev.francies.betterduels.Admin;
+package dev.francies.betterduels.admin;
 
 import dev.francies.betterduels.BetterDuels;
 import org.bukkit.Bukkit;
