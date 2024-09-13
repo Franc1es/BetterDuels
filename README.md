@@ -20,12 +20,12 @@ For questions or assistance, visit my [site](https://franciesdev.it). :dizzy:
 * betterduels.accept: Permission to accept a duel.
 * betterduels.deny: Permission to deny a duel.
 ### Commands: 📃
-/duel: Sends a duel request to a player.
-/duelaccept: Accepts a duel request.
-/dueldeny: Denies a duel request.
-/btreload: Reloads the BetterDuels configuration.
-/duelstats: Displays the top 10 players with the most wins.
-/duelstatsremove: Removes the nearest leaderboard.
+* /duel: Sends a duel request to a player.
+* /duelaccept: Accepts a duel request.
+* /dueldeny: Denies a duel request.
+* /btreload: Reloads the BetterDuels configuration.
+* /duelstats: Displays the top 10 players with the most wins.
+* /duelstatsremove: Removes the nearest leaderboard.
 
 ### Database 💾
 To create a leaderboard, the plugin automatically creates a table
