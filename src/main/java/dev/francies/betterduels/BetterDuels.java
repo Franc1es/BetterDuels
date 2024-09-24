@@ -38,7 +38,7 @@ public final class BetterDuels extends JavaPlugin {
     private DatabaseConnection dbConnection;
     private File leaderboardFile;
     private FileConfiguration leaderboardConfig;
-    private final String versionUrl = "https://www.franciesdev.it/api/betterduels.json";
+    private final String versionUrl = "https://www.francescoferrara.it/api/betterduels.json";
 
     @Override
     public void onEnable() {
