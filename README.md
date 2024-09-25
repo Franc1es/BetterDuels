@@ -11,7 +11,7 @@ This plugin requires MultiVerse-Core 2 as a dependency.
 You can download MultiVerse-Core [qui](https://dev.bukkit.org/projects/multiverse-core).
 
 ### Info 🔎
-For questions or assistance, visit my [site](https://franciesdev.it). :dizzy:
+For questions or assistance, visit my [site]](https://francescoferrara.it/mc/index.php). :dizzy:
 
 ### Permissions 📃
 * betterduels.admin: Allows the player to reload the BetterDuels configuration or show the leaderboard.
