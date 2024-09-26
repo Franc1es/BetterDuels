@@ -14,7 +14,7 @@ You can download MultiVerse-Core [qui](https://dev.bukkit.org/projects/multivers
 For questions or assistance, visit my [site](https://francescoferrara.it/mc/index.php). :dizzy:
 
 ### Permissions 📃
-* betterduels.admin: Allows the player to reload the BetterDuels configuration or show the leaderboard.
+* betterduels.admin: Allows the player to reload the BetterDuels configuration.
 * betterduels.start: Permission to start a duel.
 * betterduels.kit: Permission for accessing kits.
 * betterduels.accept: Permission to accept a duel.
@@ -24,8 +24,6 @@ For questions or assistance, visit my [site](https://francescoferrara.it/mc/inde
 * /duelaccept: Accepts a duel request.
 * /dueldeny: Denies a duel request.
 * /btreload: Reloads the BetterDuels configuration.
-* /duelstats: Displays the top 10 players with the most wins.
-* /duelstatsremove: Removes the nearest leaderboard.
 
 ### Database 💾
 To create a leaderboard, the plugin automatically creates a table
