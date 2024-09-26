@@ -15,13 +15,17 @@ public class Messages {
         if (config.getConfigurationSection("messages") != null) {
             for (String key : config.getConfigurationSection("messages").getKeys(false)) {
                 String path = "messages." + key;
-                String message = config.getString(path, "&cMesssage not found: " + key);
+                String message = config.getString(path, "&cMessage not found: " + key);
                 messages.put(key, ChatColor.translateAlternateColorCodes('&', message));
             }
         }
     }
 
+
     public static String get(String key) {
-        return messages.getOrDefault(key, ChatColor.translateAlternateColorCodes('&', Messages.get("prefix") + "&cMesssage not found: " + key));
+
+        String prefix = messages.getOrDefault("prefix", "&7[&6BetterDuels&7] ");
+
+        return messages.getOrDefault(key, ChatColor.translateAlternateColorCodes('&', prefix + "&cMessage not found: " + key));
     }
 }

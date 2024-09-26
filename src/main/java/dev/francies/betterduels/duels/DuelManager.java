@@ -59,7 +59,8 @@ public class DuelManager  {
     public void endDuel(Player player1, Player player2, String arenaName) {
         player1.getInventory().clear();
         player2.getInventory().clear();
-        teleportToMainWorld(player1, player2);
+        teleportToMainWorld(player1);
+
 
         Bukkit.getScheduler().runTaskLater(main, () -> {
             restoreInventory(player1);
@@ -71,13 +72,13 @@ public class DuelManager  {
         }, 40L);
 
 
-
         duelParticipants.remove(player1);
         duelParticipants.remove(player2);
         worldManager.releaseArena(arenaName);
         playerArenaMap.put(player1, arenaName);
         playerArenaMap.put(player2, arenaName);
     }
+
 
 
     private void giveReward(Player player) {
@@ -168,10 +169,10 @@ public class DuelManager  {
 
     }
 
-    private void teleportToMainWorld(Player player1, Player player2) {
+    public void teleportToMainWorld(Player player) {
 
-        player1.teleport(main.getWorldManager().getEndLocation());
-        player2.teleport(main.getWorldManager().getEndLocation());
+        player.teleport(main.getWorldManager().getEndLocation());
+
     }
 
     public void setGameMode(Player player1, Player player2) {

@@ -1,7 +1,6 @@
 package dev.francies.betterduels;
 
 import com.google.gson.JsonObject;
-import dev.francies.betterduels.admin.DuelStatsRemove;
 import dev.francies.betterduels.admin.ReloadCommand;
 import dev.francies.betterduels.database.DatabaseConnection;
 import dev.francies.betterduels.database.DuelStats;
@@ -19,7 +18,6 @@ import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,8 +34,6 @@ public final class BetterDuels extends JavaPlugin {
     private DuelManager duelManager;
     private DuelWorldManager worldManager;
     private DatabaseConnection dbConnection;
-    private File leaderboardFile;
-    private FileConfiguration leaderboardConfig;
     private final String versionUrl = "https://www.francescoferrara.it/api/betterduels.json";
 
     @Override
@@ -49,6 +45,7 @@ public final class BetterDuels extends JavaPlugin {
         metrics.addCustomChart(new SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
 
         long startTime = System.currentTimeMillis();
+        initializeDatabase();
 
         getLogger().log(Level.INFO, "_________________________");
         getLogger().log(Level.INFO, "BetterDuels v" + this.getDescription().getVersion());
@@ -63,18 +60,14 @@ public final class BetterDuels extends JavaPlugin {
 
         this.saveDefaultConfig();
 
-        String host = getConfig().getString("database.host");
-        String databaseName = getConfig().getString("database.databasename");
-        String username = getConfig().getString("database.username");
-        String password = getConfig().getString("database.password");
-        boolean useSSL = getConfig().getBoolean("database.flagssl");
-        dbConnection = new DatabaseConnection(host, databaseName, username, password, useSSL);
-        dbConnection.initialize();
-
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new DuelStats(this, dbConnection).register();
+            getLogger().info("PlaceholderAPI detected! Placeholders registered.");
+        } else {
+            getLogger().warning("PlaceholderAPI not found. Placeholders not registered.");
+        }
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(this), this);
 
-        DuelStats duelStats = new DuelStats(this, dbConnection);
-        duelStats.clearExistingLeaderboard();
 
         this.getServer().getPluginManager().registerEvents(new onInventoryCloseEvent(this), this);
         DuelCommand duelCommandExecutor = new DuelCommand(this);
@@ -82,8 +75,6 @@ public final class BetterDuels extends JavaPlugin {
         getCommand("duelaccept").setExecutor(duelCommandExecutor);
         getCommand("dueldeny").setExecutor(duelCommandExecutor);
         this.getCommand("btreload").setExecutor(new ReloadCommand(this));
-        this.getCommand("duelstats").setExecutor(duelStats);
-        this.getCommand("duelstatsremove").setExecutor(new DuelStatsRemove(this));
         getLogger().log(Level.INFO, "_________________________");
         getLogger().log(Level.INFO, "Loaded in " + (System.currentTimeMillis() - startTime) + "ms");
         getLogger().log(Level.INFO, "_________________________");
@@ -96,7 +87,16 @@ public final class BetterDuels extends JavaPlugin {
         this.getLogger().log(Level.INFO, "BetterDuels v" + this.getDescription().getVersion() + " says bye bye");
         this.getLogger().log(Level.INFO, "_________________________");
     }
+    private void initializeDatabase() {
+        String host = getConfig().getString("database.host");
+        String databaseName = getConfig().getString("database.databasename");
+        String username = getConfig().getString("database.username");
+        String password = getConfig().getString("database.password");
+        boolean useSSL = getConfig().getBoolean("database.flagssl");
 
+        dbConnection = new DatabaseConnection(host, databaseName, username, password, useSSL);
+        dbConnection.initialize();
+    }
     public KitManager getKitManager() {
         return kitManager;
     }
@@ -115,33 +115,6 @@ public final class BetterDuels extends JavaPlugin {
         return dbConnection;
     }
 
-
-    private void createLeaderboardConfig() {
-        leaderboardFile = new File(getDataFolder(), "leaderboard.yml");
-        if (!leaderboardFile.exists()) {
-            try {
-                leaderboardFile.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        leaderboardConfig = YamlConfiguration.loadConfiguration(leaderboardFile);
-    }
-
-    public FileConfiguration getLeaderboardConfig() {
-        if (leaderboardConfig == null) {
-            createLeaderboardConfig();
-        }
-        return leaderboardConfig;
-    }
-
-    public void saveLeaderboardConfig() {
-        try {
-            leaderboardConfig.save(leaderboardFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void checkForUpdates(Player player) {
 
         try {

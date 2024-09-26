@@ -1,8 +1,8 @@
 package dev.francies.betterduels.database;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseConnection {
 
@@ -11,6 +11,7 @@ public class DatabaseConnection {
     private String username;
     private String password;
     private boolean useSSL;
+    private Connection connection;
 
     public DatabaseConnection(String host, String databaseName, String username, String password, boolean useSSL) {
         this.host = host;
@@ -18,61 +19,83 @@ public class DatabaseConnection {
         this.username = username;
         this.password = password;
         this.useSSL = useSSL;
-
     }
-    public List<PlayerStat> getTopPlayersByWins(int limit) throws SQLException {
-        List<PlayerStat> topPlayers = new ArrayList<>();
-        String query = "SELECT player_uuid, wins FROM BetterDuels_Stats ORDER BY wins DESC LIMIT ?";
 
-        try (Connection conn = this.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, limit);
+    public void initialize() {
+        try {
+            openConnection();
+            createTable();
+        } catch (SQLException e) {
+            System.out.println("Error initializing database: " + e.getLocalizedMessage());
+        }
+    }
+    public Connection getConnection() throws SQLException {
+        checkConnection();
+        return this.connection;
+    }
+
+    private void openConnection() throws SQLException {
+        if (this.connection != null && !this.connection.isClosed()) {
+            return;
+        }
+
+        String url = "jdbc:mysql://" + host + "/" + databaseName + "?useSSL=" + useSSL + "&autoReconnect=true";
+        this.connection = DriverManager.getConnection(url, username, password);
+    }
+
+    private void checkConnection() throws SQLException {
+        if (this.connection == null || this.connection.isClosed() || !this.connection.isValid(2)) {
+            openConnection();
+        }
+    }
+
+    private void createTable() throws SQLException {
+        checkConnection();
+
+        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS BetterDuels_Stats (" +
+                "player_uuid VARCHAR(36) NOT NULL," +
+                "duels INT DEFAULT 0," +
+                "wins INT DEFAULT 0," +
+                "losses INT DEFAULT 0," +
+                "PRIMARY KEY (player_uuid)" +
+                ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(sqlCreateTable);
+        }
+    }
+
+    public Map<String, Integer> getPlayerInfoByRank(int position) throws SQLException {
+        checkConnection();
+
+        Map<String, Integer> playerInfo = new HashMap<>();
+        String query = "SELECT player_uuid, wins FROM BetterDuels_Stats ORDER BY wins DESC LIMIT 1 OFFSET ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, position);
 
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String playerUuid = rs.getString("player_uuid");
-                    int wins = rs.getInt("wins");
-                    topPlayers.add(new PlayerStat(playerUuid, wins));
+                if (rs.next()) {
+                    playerInfo.put(rs.getString("player_uuid"), rs.getInt("wins"));
                 }
             }
         }
-        return topPlayers;
+        return playerInfo;
     }
-    public void initialize() {
 
-        String url = "jdbc:mysql://" + host + "/" + databaseName + "?useSSL="+ useSSL +"&autoReConnect=true";
+    public int getTotalDuelsForPlayer(String playerUuid) throws SQLException {
+        checkConnection();
 
-        try (Connection conn = DriverManager.getConnection(url, username, password);
-             Statement stmt = conn.createStatement()) {
+        String query = "SELECT duels FROM BetterDuels_Stats WHERE player_uuid = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, playerUuid);
 
-
-            String sqlCreateDB = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-            stmt.executeUpdate(sqlCreateDB);
-
-
-            try (Connection connDB = DriverManager.getConnection(url + "/" + databaseName, username, password)) {
-
-                String sqlCreateTable = "CREATE TABLE IF NOT EXISTS BetterDuels_Stats (" +
-                        "player_uuid VARCHAR(36) NOT NULL," +
-                        "duels INT DEFAULT 0," +
-                        "wins INT DEFAULT 0," +
-                        "losses INT DEFAULT 0," +
-                        "PRIMARY KEY (player_uuid)" +
-                        ")";
-                try (Statement stmtDB = connDB.createStatement()) {
-                    stmtDB.executeUpdate(sqlCreateTable);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("duels");
                 }
             }
-
-        } catch (SQLException e) {
-            e.getLocalizedMessage();
-            System.out.println(e);
         }
+        return 0;
     }
 
-
-    public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://" + host + "/" + databaseName + "?useSSL="+ useSSL +"&autoReConnect=true";
-        return DriverManager.getConnection(url, username, password);
-    }
 }

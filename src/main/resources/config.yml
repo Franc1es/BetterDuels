@@ -144,15 +144,11 @@ reward:
   material: DIAMOND # Item to be received as a reward
   command: "eco give %player% 200" # %player% is the player who won
 
-leaderboard:
-  player-to-show: 10 # Number of players to display on the leaderboard
-  header: "&6Top X Players with the Most Wins:" # X will be replaced with the player-to-show value
-  entry_format: "&e%rank%. %player% - Wins: %wins%"
-  stats-update: 120 # Update interval for leaderboard in seconds
-  # Leaderboard placeholders:
-  # %rank% is the player's position on the leaderboard
-  # %player% is the player's name
-  # %wins% is the number of wins
+# PAPI PLACEHOLDERS
+  # %duel_player_n% n stand for the position, like 1,2,3,...
+  # %duel_wins_n% n stand for the position, like 1,2,3,...
+  # %duel_total_n% n stand for the position, like 1,2,3,...
+
 
 # MySql
 database:
