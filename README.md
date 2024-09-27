@@ -26,5 +26,4 @@ For questions or assistance, visit my [site](https://francescoferrara.it/mc/inde
 * /btreload: Reloads the BetterDuels configuration.
 
 ### Database 💾
-To create a leaderboard, the plugin automatically creates a table
-in your database, which you must have already created, whose information you specified in the `config.yml`
+To create a leaderboard, you can use papi's placeholders highlighted in the `config.yml`
